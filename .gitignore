@@ -1,0 +1,6 @@
+*.pk3
+logs/
+records/
+hmhistory
+/fscache.dat
+*.log
