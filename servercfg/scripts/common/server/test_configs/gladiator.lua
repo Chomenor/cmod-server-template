@@ -63,6 +63,10 @@ function module.get_vote_handler(config_options)
       name = "sniper", cmd_aliases = utils.set("disi"),
       tags = utils.set("any", "sniper", "custom_weapons", "needs_map"), nocombo_tags = utils.set("custom_weapons"),
     })
+    vote_state.handlers.tag = handlers.get_keyword_handler({
+      name = "tag",
+      tags = utils.set("any", "tag", "custom_weapons", "needs_map"), nocombo_tags = utils.set("custom_weapons"),
+    })
     vote_state.handlers.normal = handlers.get_keyword_handler({
       name = "normal",
       tags = utils.set("any", "custom_weapons"), nocombo_tags = utils.set("custom_weapons"),
@@ -134,7 +138,7 @@ function module.get_vote_handler(config_options)
       for key, command in pairs(voting_utils.commands_with_tag(vote_state.commands, "needs_map")) do
         error({ msg = string.format("%s must be combined with a map vote.", command.user_parameter) })
       end
-      if com.cvar_get_integer("cfg_no_custom_weapon_votes") then
+      if com.cvar_get_integer("cfg_no_custom_weapon_votes") ~= 0 then
         for key, command in pairs(voting_utils.commands_with_tag(vote_state.commands, "custom_weapons")) do
           error({ msg = string.format("%s must be combined with a map vote.", command.user_parameter) })
         end
@@ -208,9 +212,22 @@ function module.get_vote_handler(config_options)
 
       if vote_state.commands.sniper then
         config_utils.set_cvar_table({
-          g_mod_instagib = 1,
           cfg_no_custom_weapon_votes = 1,
+          g_mod_instagib = 1,
           g_mod_noOfGamesPerMatch = 8,
+        })
+      elseif vote_state.commands.tag then
+        config_utils.set_cvar_table({
+          cfg_no_custom_weapon_votes = 1,
+          g_mod_WeaponAvailableFlags = "NNNNNNNNNNYN",
+          g_mod_PowerupsAvailableFlags = "NYYYNYNYYYYYYY",
+          g_mod_HoldableAvailableFlags = "YNYYY",
+          g_mod_WeaponAmmoMode = "000000000010",
+          g_mod_ArmorAvailableFlag = "N",
+          g_mod_HealthAvailableFlag = "N",
+          g_dmgmult = 100,
+          dmflags = 8,
+          g_knockback = 2,
         })
       end
     end
