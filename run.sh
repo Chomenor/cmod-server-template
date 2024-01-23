@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Dedicated level: 1=private server, 2=public server listed on masters
+EF_DEDICATED="1"
+
 # Location of this script
 EF_BASEPATH="$(dirname $0)"
 
@@ -26,5 +29,6 @@ chmod +x "$EF_APP"
 ${EF_MAPDB:+" +set fs_mapdb \"$EF_MAPDB\""} \
 ${EF_SHARED:+" +set fs_shared \"$EF_SHARED\""} \
 +set lua_startup "scripts/start.lua" \
++set dedicated "$EF_DEDICATED" \
 ${EF_IP4:+" +set net_ip \"$EF_IP4\""} \
 ${EF_PORT:+" +set net_port \"$EF_PORT\""}
