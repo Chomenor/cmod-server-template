@@ -20,10 +20,10 @@ cd cmod-server-template
 
 Download the cMod engine alpha [release](https://github.com/Chomenor/cmod-engine-alpha/releases/tag/latest) and extract the dedicated server binary `cmod.ded.x64` to this directory.
 
-Edit the `run.sh` file and change the EF_MAPDB line to the following (adjust the path if your location of the serverdata directory is different).
+Edit the `servers/main/run.sh` file and change the EF_MAPDB line to the following (adjust the path if your location of the serverdata directory is different).
 
 ```
-EF_MAPDB="$EF_BASEPATH/../cmod-map-loader/output/data/serverdata"
+EF_MAPDB="$EF_SERVER_DIR/../../../cmod-map-loader/output/data/serverdata"
 ```
 
 Commit the changes in git.
@@ -36,5 +36,5 @@ git commit -m "initial server setup"
 Start the server with the following command. Note that in some environments the first startup may take some time.
 
 ```
-./run.sh
+servers/main/run.sh
 ```

@@ -4,10 +4,13 @@
 EF_DEDICATED="1"
 
 # Location of this script
-EF_BASEPATH="$(dirname $0)"
+EF_SERVER_DIR="$(dirname $0)"
 
 # Location of cMod dedicated executable
-EF_APP="$EF_BASEPATH/cmod.ded.x64"
+EF_APP="$EF_SERVER_DIR/../../cmod.ded.x64"
+
+# Location of shared directory
+EF_SHARED_DIR="$EF_SERVER_DIR/../../shared"
 
 # Server IP (Optional)
 #EF_IP4="1.2.3.4"
@@ -16,18 +19,19 @@ EF_APP="$EF_BASEPATH/cmod.ded.x64"
 #EF_PORT="27960"
 
 # Location of exported maploader files (Optional)
-#EF_MAPDB="../maploader/output/data/serverdata"
+#EF_MAPDB="$EF_SERVER_DIR/../../../cmod-map-loader/output/data/serverdata"
 
 # Location of additional files shared between servers (Optional)
-#EF_SHARED="/some/path"
+#EF_ADDITIONAL="/some/path"
 
 
 chmod +x "$EF_APP"
 
-"$EF_APP" +set fs_dirs "*fs_basepath fs_mapdb fs_shared" \
-+set fs_basepath "$EF_BASEPATH" \
+"$EF_APP" +set fs_dirs "*fs_basepath fs_additional fs_shared fs_mapdb" \
++set fs_basepath "$EF_SERVER_DIR" \
++set fs_shared "$EF_SHARED_DIR" \
+${EF_ADDITIONAL:+" +set fs_additional \"$EF_ADDITIONAL\""} \
 ${EF_MAPDB:+" +set fs_mapdb \"$EF_MAPDB\""} \
-${EF_SHARED:+" +set fs_shared \"$EF_SHARED\""} \
 +set lua_startup "scripts/start.lua" \
 +set dedicated "$EF_DEDICATED" \
 ${EF_IP4:+" +set net_ip \"$EF_IP4\""} \

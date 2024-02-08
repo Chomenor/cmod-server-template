@@ -2,5 +2,5 @@
 logs/
 records/
 hmhistory
-/fscache.dat
+fscache.dat
 *.log
