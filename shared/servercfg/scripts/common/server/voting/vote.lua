@@ -248,9 +248,11 @@ end, "voting_vote")
 ---------------------------------------------------------------------------------------
 -- Resume suspended vote on map restart.
 utils.register_event_handler(sv.events.post_map_restart, function(context, ev)
-  if vote.current_vote and vote.current_vote.intermission_suspend_remaining then
-    vote.current_vote.end_time = sv.get_sv_time() + vote.current_vote.intermission_suspend_remaining
-    vote.current_vote.intermission_suspend_remaining = nil
+  if vote.current_vote then
+    if vote.current_vote.intermission_suspend_remaining then
+      vote.current_vote.end_time = sv.get_sv_time() + vote.current_vote.intermission_suspend_remaining
+      vote.current_vote.intermission_suspend_remaining = nil
+    end
     render_vote(true)
   end
   context:call_next(ev)
