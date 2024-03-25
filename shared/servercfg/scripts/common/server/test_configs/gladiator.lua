@@ -170,7 +170,7 @@ function module.get_vote_handler(config_options)
         g_mod_uam = 1,
         bot_minplayers = 4,
         g_speed = 320,
-        g_unlagged = 1,
+        g_unlagged = 2,
         timelimit = 10,
         g_ghostRespawn = 3,
         g_mod_finalistsTimelimit = 4,
