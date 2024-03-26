@@ -12,6 +12,7 @@ function module.init_server(config_options)
   local voting_vote = require("scripts/common/server/voting/vote")
   local voting_ccmd = require("scripts/common/server/voting/ccmd")
   local rotation = require("scripts/common/server/rotation")
+  require("scripts/common/server/misc/chat_filter")
 
   logging.init_console_log("console", false)
   logging.init_file_log("voting", "voting", "standard", "datetime")
