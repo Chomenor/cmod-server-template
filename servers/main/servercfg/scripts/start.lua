@@ -3,8 +3,6 @@ com.run_file("scripts/common/core/core.lua")
 
 local server_template = require("scripts/common/server/test_configs/server")
 local config_options = {
-  default_gametype = 0,
-
   -- cvars that are always set on map startup
   general_cvars = {
     sv_hostname = "Test Server",

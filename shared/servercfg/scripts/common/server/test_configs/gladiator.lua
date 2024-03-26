@@ -163,9 +163,17 @@ function module.get_vote_handler(config_options)
     end
 
     --------------------------------------------------
-    local function uam_config()
+    -- Called when starting a new map.
+    local function run_map()
+      -- reset cvars for each map
+      utils.context_run_cmd("cvar_restart")
+
+      -- set default cvars
       config_utils.set_cvar_table({
-        g_gametype = config_options.default_gametype or 0,
+        sv_hostname = "Test Server",
+        bot_nochat = 1,
+        sv_fps = 40,
+        g_gametype = 0,
         fs_servercfg = "servercfg_cmod servercfg",
         g_mod_uam = 1,
         bot_minplayers = 4,
@@ -181,6 +189,7 @@ function module.get_vote_handler(config_options)
         lua_entitySuppressMiscCvars = 1,
       })
 
+      -- get random weapons for match
       local random_weapon_flags = config_utils.generate_random_flags({
         -- percent chance of weapons being available each match
         ["2"] = 70,
@@ -195,17 +204,20 @@ function module.get_vote_handler(config_options)
       config_utils.set_cvar("cfg_gladiator_random_weapons", random_weapon_string)
       set_gladiator_random_weapons()
 
+      -- set general cvars from server config
+      config_utils.set_cvar_table(config_options.general_cvars)
+
+      -- set gametype from vote parameters
       if vote_state.commands.ffa then
-        config_utils.set_cvar_table({
-          g_gametype = 0,
-        })
+        config_utils.set_cvar("g_gametype", 0)
       elseif vote_state.commands.thm then
-        config_utils.set_cvar_table({
-          g_gametype = 3,
-        })
+        config_utils.set_cvar("g_gametype", 3)
       elseif vote_state.commands.ctf then
+        config_utils.set_cvar("g_gametype", 4)
+      end
+
+      if com.cvar_get_integer("g_gametype") == 4 then
         config_utils.set_cvar_table({
-          g_gametype = 4,
           g_speed = 300,
         })
       end
@@ -230,21 +242,6 @@ function module.get_vote_handler(config_options)
           g_knockback = 2,
         })
       end
-    end
-
-    --------------------------------------------------
-    -- Called when starting a new map.
-    local function run_map()
-      -- initial config
-      utils.context_run_cmd("cvar_restart")
-
-      config_utils.set_cvar_table({
-        sv_hostname = "Test Server",
-        bot_nochat = 1,
-        sv_fps = 40,
-      })
-
-      uam_config()
 
       -- configure entity conversion
       if vote_state.map_info.entity_type_painkeep then
@@ -263,10 +260,7 @@ function module.get_vote_handler(config_options)
         pakrefs_addons.add_models(ref_set)
       end
 
-      -- set config options cvars
-      config_utils.set_cvar_table(config_options.general_cvars)
-
-      -- process any voted settings
+      -- load any voted settings
       run_vote_config()
 
       -- start the map
