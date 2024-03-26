@@ -28,7 +28,7 @@ function module.init_server(config_options)
   voting_ccmd.map_override = true
 
   -- Configure rotation.
-  rotation.set_rotation(rotation.get_coroutine_iterator(function()
+  rotation.set_rotation(function()
     local function yield(map_name, args)
       coroutine.yield({ name = map_name, args = args })
     end
@@ -50,7 +50,7 @@ function module.init_server(config_options)
     yield("hm_scav1")
     yield("hm_voy1")
     yield("hm_voy2")
-  end))
+  end)
 
   -- Launch first map.
   com.cmd_exec("map_skip")
