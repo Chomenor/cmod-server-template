@@ -28,29 +28,7 @@ function module.init_server(config_options)
   voting_ccmd.map_override = true
 
   -- Configure rotation.
-  rotation.set_rotation(function()
-    local function yield(map_name, args)
-      coroutine.yield({ name = map_name, args = args })
-    end
-
-    yield("ctf_and1")
-    yield("ctf_kln1")
-    yield("ctf_kln2")
-    yield("ctf_voy1")
-    yield("ctf_voy2")
-    yield("hm_borg1")
-    yield("hm_borg2")
-    yield("hm_borg3")
-    yield("hm_cam")
-    yield("hm_dn1")
-    yield("hm_dn2")
-    yield("hm_for1")
-    yield("hm_kln1")
-    yield("hm_noon")
-    yield("hm_scav1")
-    yield("hm_voy1")
-    yield("hm_voy2")
-  end)
+  rotation.set_rotation(config_options.rotation)
 
   -- Launch first map.
   com.cmd_exec("map_skip")
