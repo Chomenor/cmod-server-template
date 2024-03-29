@@ -55,7 +55,8 @@ function pakrefs.ReferenceSet()
   ---@param hash integer in signed integer format
   ---@param pure boolean add entry to pure list
   ---@param download_source any? add entry to download list, with info about how to retrieve file
-  local function add_reference(self, name, hash, pure, download_source)
+  ---@param pure_sort string? sort key to use for pure list in place of name
+  local function add_reference(self, name, hash, pure, download_source, pure_sort)
     if type(hash) ~= "number" or type(pure) ~= "boolean" then
       error("AddReference invalid parameter type")
     end
@@ -65,20 +66,22 @@ function pakrefs.ReferenceSet()
         hash = hash,
         pure = pure,
         download_source = download_source,
+        pure_sort = pure_sort,
       }
     else
       local entry = self.table[hash]
       if entry.name ~= name then
         utils.print(string.format("WARNING: Paks with inconsistent names (%s / %s)", entry.name, name))
       end
+      entry.pure_sort = entry.pure_sort or pure_sort
       entry.pure = entry.pure or not download_source
       entry.download_source = entry.download_source or download_source
     end
   end
 
   ---------------------------------------------------------------------------------------
-  function rs:add_pure_reference(name, hash)
-    add_reference(self, name, hash, true)
+  function rs:add_pure_reference(name, hash, pure_sort)
+    add_reference(self, name, hash, true, nil, pure_sort)
   end
 
   ---------------------------------------------------------------------------------------
@@ -129,7 +132,7 @@ function pakrefs.ReferenceSet()
     local sort_list = {}
     for hash, entry in pairs(self.table) do
       if (pure and entry.pure) or (download and entry.download_source) then
-        local mod_dir, filename = split_name(entry.name)
+        local mod_dir, filename = split_name((pure and entry.pure_sort) or entry.name)
         local mod_priority = mod_priority_table[mod_dir] or mod_priority_table["*"] or -1
         table.insert(sort_list, {
           entry = entry,
@@ -221,7 +224,7 @@ local function generate_reference_state(client)
   -- add map database references
   if maploader.map_info and maploader.map_info.client_paks then
     for idx, entry in ipairs(maploader.map_info.client_paks) do
-      refs:add_pure_reference(entry.pk3_name, entry.pk3_hash)
+      refs:add_pure_reference(entry.pk3_name, entry.pk3_hash, entry.pure_sort)
       if entry.download then
         refs:add_download_reference(entry.pk3_name, entry.pk3_hash)
       end
