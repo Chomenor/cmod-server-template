@@ -118,7 +118,7 @@ local function check_waiting_commands(client)
   end
 
   local state = get_client_state(client)
-  local time = sv.get_svs_time()
+  local time = svutils.svs_time_elapsed()
 
   for _, type in ipairs({ "userinfo", "team", "class" }) do
     if state["pending_" .. type] then
@@ -173,7 +173,7 @@ utils.register_event_handler(sv.events.client_cmd, function(context, ev)
   end
 
   local state = get_client_state(ev.client)
-  local time = sv.get_svs_time()
+  local time = svutils.svs_time_elapsed()
 
   if cmd == "say" or cmd == "sayteam" or cmd == "tell" then
     -- chat commands are dropped if in flooded state

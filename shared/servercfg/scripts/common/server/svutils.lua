@@ -57,6 +57,21 @@ function svutils.get_intermission_status()
   return "empty"
 end
 
+local svs_time_elapsed_prev = sv.get_svs_time()
+local svs_time_elapsed_counter = 0
+
+---------------------------------------------------------------------------------------
+-- Returns svs.time modified to always be an increasing positive number.
+function svutils.svs_time_elapsed()
+  local time = sv.get_svs_time()
+  local elapsed = time - svs_time_elapsed_prev
+  if elapsed > 0 then
+    svs_time_elapsed_counter = svs_time_elapsed_counter + elapsed
+  end
+  svs_time_elapsed_prev = time
+  return svs_time_elapsed_counter
+end
+
 --[[===========================================================================================
 CLIENT SESSIONS
 
@@ -210,7 +225,7 @@ utils.register_event_handler(com.events.post_frame, function(context, ev)
   local new_event = {
     name = svutils.events.post_server_frame,
     sv_time = sv.get_sv_time(),
-    svs_time = sv.get_svs_time(),
+    svs_time = svutils.svs_time_elapsed(),
   }
   utils.run_event(new_event)
   context:call_next(ev)

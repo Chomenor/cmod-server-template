@@ -33,7 +33,7 @@ local MAX_VOTE_FAILS = 32
 -- Returns list of vote fails for given address, in terms of time since fail,
 -- ordered from oldest to most recent.
 local function get_vote_fails(address_str)
-  local current_time = sv.get_svs_time()
+  local current_time = svutils.svs_time_elapsed()
   local result = {}
   for i = 1, MAX_VOTE_FAILS do
     local fail = vote.vote_fails[(vote.vote_fails_index + i) % MAX_VOTE_FAILS]
@@ -66,7 +66,7 @@ end
 ---------------------------------------------------------------------------------------
 local function record_vote_fail(address_str)
   vote.vote_fails_index = (vote.vote_fails_index + 1) % MAX_VOTE_FAILS
-  vote.vote_fails[vote.vote_fails_index] = { address = address_str, time = sv.get_svs_time() }
+  vote.vote_fails[vote.vote_fails_index] = { address = address_str, time = svutils.svs_time_elapsed() }
 end
 
 --[[===========================================================================================
@@ -291,7 +291,7 @@ utils.register_event_handler(svutils.events.client_cmd_prefix .. "callvote", fun
     local vote_started = false
 
     -- rate limit callvote command due to performance and logging considerations
-    local time = sv.get_svs_time()
+    local time = svutils.svs_time_elapsed()
     local last_time = svutils.clients[ev.client].last_vote_time
     if last_time and time > last_time and time - last_time < 250 then
       return
@@ -394,7 +394,7 @@ end, "voting_vote")
 
 ---------------------------------------------------------------------------------------
 utils.register_event_handler(sv.events.post_map_start, function(context, ev)
-  vote.map_start_time = sv.get_svs_time()
+  vote.map_start_time = svutils.svs_time_elapsed()
   context:call_next(ev)
 end, "voting_vote")
 
