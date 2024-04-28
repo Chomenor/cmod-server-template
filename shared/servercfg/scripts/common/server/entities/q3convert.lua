@@ -117,6 +117,8 @@ function q3convert.run_conversion(entities, config, info_handler)
     translations[q3_ammo] = ef_ammo
   end
 
+  local location_count = 0
+
   for entity in entities:iter() do
     -- check for gametype-specific entity
     if entity.val.gametype and gametype_string and not entity.val.gametype:find(gametype_string) then
@@ -167,6 +169,16 @@ function q3convert.run_conversion(entities, config, info_handler)
     if entity.val.classname == "func_plat" and entity.val.wait then
       info_handler:add_message("clearing wait for func_plat")
       entity:set("wait", nil)
+    end
+
+    -- too many location tags can cause configstring index overflow on EF
+    if entity.val.classname == "target_location" then
+      location_count = location_count + 1
+      if location_count > 340 then
+        info_handler:add_message("skipping excessive number of location tags")
+        entity.disabled = true
+        goto continue
+      end
     end
 
     -- apparently this fixes some issues with painkeep maps
