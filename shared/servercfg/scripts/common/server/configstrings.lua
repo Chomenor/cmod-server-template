@@ -120,6 +120,9 @@ function configstrings.set_configstring(index, val, force_send)
       end
     end
   end
+
+  -- set value in engine
+  sv.update_engine_configstring(index, get_configstring_value(index, nil, false))
 end
 
 ---------------------------------------------------------------------------------------

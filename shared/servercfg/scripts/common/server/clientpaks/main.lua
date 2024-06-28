@@ -269,6 +269,12 @@ utils.register_event_handler(cshandling.events.send_systeminfo, function(context
   context:call_next(ev)
   local systeminfo = ev.value
 
+  -- Default (non-client specific) references should currently already be set
+  -- in cvars, so they don't need to be modified here
+  if not ev.client then
+    return
+  end
+
   -- Generate new references when sending new gamestate
   if ev.sendingGamestate then
     local refs
