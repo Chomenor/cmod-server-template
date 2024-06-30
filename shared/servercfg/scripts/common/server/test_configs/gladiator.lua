@@ -172,6 +172,7 @@ function module.get_vote_handler(config_options)
       config_utils.set_cvar_table({
         sv_hostname = "Test Server",
         bot_nochat = 1,
+        g_log = "",
         sv_fps = 40,
         g_gametype = 0,
         fs_servercfg = "servercfg_cmod servercfg",
