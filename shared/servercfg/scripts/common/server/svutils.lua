@@ -5,6 +5,7 @@ Misc server functions used by other scripts.
 ===========================================================================================--]]
 
 local utils = require("scripts/common/core/utils")
+local logging = require("scripts/common/core/logging")
 
 local svutils = core.init_module()
 
@@ -93,8 +94,79 @@ utils.register_event_handler(sv.events.pre_client_connect, function(context, ev)
 end, "svutils-init_client_session", 1000)
 
 --[[===========================================================================================
+MISC EVENTS
+===========================================================================================--]]
+
+---------------------------------------------------------------------------------------
+-- Run actions after client connects.
+utils.register_event_handler(sv.events.post_client_connect, function(context, ev)
+  if not svutils.client_is_bot(ev.client) then
+    svutils.clients[ev.client].username = svutils.get_client_name(ev.client)
+    logging.print(string.format(
+        "Client %i connected as \"%s\" from %s ~ There are now %i players connected.",
+        ev.client, svutils.clients[ev.client].username,
+        sv.netadr_to_string(sv.get_client_netadr(ev.client)),
+        svutils.count_players()),
+      "LUA_NOTIFY_PLAYER_CONNECT")
+  end
+  context:call_next(ev)
+end, "svutils-misc_events", 1000)
+
+---------------------------------------------------------------------------------------
+-- Run actions after client disconnects.
+utils.register_event_handler(sv.events.post_client_disconnect, function(context, ev)
+  if not svutils.client_is_bot(ev.client) then
+    logging.print(string.format(
+        "Client %i as \"%s\" disconnected ~ There are now %i players connected.",
+        ev.client, svutils.clients[ev.client].username,
+        svutils.count_players()),
+      "LUA_NOTIFY_PLAYER_CONNECT")
+  end
+  context:call_next(ev)
+end, "svutils-misc_events", 1000)
+
+---------------------------------------------------------------------------------------
+-- Run actions after client userinfo changes.
+utils.register_event_handler(sv.events.post_userinfo_changed, function(context, ev)
+  if svutils.client_is_connected(ev.client) and not svutils.client_is_bot(ev.client) then
+    local new_name = svutils.get_client_name(ev.client)
+    if new_name ~= svutils.clients[ev.client].username then
+      logging.print(string.format(
+          "Client %i renamed from \"%s\" to \"%s\"",
+          ev.client, svutils.clients[ev.client].username, new_name),
+        "LUA_NOTIFY_PLAYER_RENAME")
+      svutils.clients[ev.client].username = new_name
+    end
+  end
+  context:call_next(ev)
+end, "svutils-misc_events", 1000)
+
+---------------------------------------------------------------------------------------
+-- Run actions after map changes.
+utils.register_event_handler(sv.events.post_map_start, function(context, ev)
+  logging.print(string.format("Map Change to \"%s\"", com.cvar_get_string("mapname")),
+    "LUA_NOTIFY_MAP_CHANGE")
+  context:call_next(ev)
+end, "svutils-misc_events", 1000)
+
+--[[===========================================================================================
 ACCESSORS
 ===========================================================================================--]]
+
+---------------------------------------------------------------------------------------
+---@param include_bots boolean?
+---@return integer
+function svutils.count_players(include_bots)
+  local count = 0
+  local get_client_state = sv.get_client_state
+  for client = 0, svutils.const.MAX_CLIENTS - 1 do
+    if get_client_state(client) ~= "disconnected" and
+        (include_bots or not svutils.client_is_bot(client)) then
+      count = count + 1
+    end
+  end
+  return count
+end
 
 ---------------------------------------------------------------------------------------
 ---@param client integer

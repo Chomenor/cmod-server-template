@@ -85,6 +85,12 @@ local function sanitize_chat_message(msg)
 end
 
 ---------------------------------------------------------------------------------------
+local function log_chat_message(client, msg, target_str)
+  logging.print(string.format("Client %i%s ~ %s: %s",
+    client, target_str, svutils.get_client_name(client), msg), "LUA_CHAT")
+end
+
+---------------------------------------------------------------------------------------
 for _, cmd in ipairs({ "say", "say_team", "tell" }) do
   utils.register_event_handler(svutils.events.client_cmd_prefix .. cmd, function(context, ev)
     -- ignore lua callback from outgoing sv.exec_client_cmd
@@ -103,10 +109,12 @@ for _, cmd in ipairs({ "say", "say_team", "tell" }) do
         -- invalid tell command
         print_tell_list(ev.client)
       else
+        log_chat_message(ev.client, msg, string.format(" to Client %i", tgt_client))
         sv.exec_client_cmd(ev.client, string.format('"%s" %i "%s"', cmd, tgt_client, msg))
       end
     elseif com.argc() >= 2 then
       local msg = sanitize_chat_message(concat_args(1))
+      log_chat_message(ev.client, msg, utils.if_else(cmd == "say_team", " to Team", ""))
       sv.exec_client_cmd(ev.client, string.format('"%s" "%s"', cmd, msg))
     end
 
