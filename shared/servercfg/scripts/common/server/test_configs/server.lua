@@ -17,6 +17,8 @@ function module.init_server(config_options)
   logging.init_console_log("console", false)
   logging.init_file_log("voting", "voting", "standard", "datetime")
   logging.init_file_log("warnings", "warnings", "standard", "datetime")
+  logging.init_file_log("chat", "lua_chat lua_notify_player_connect " ..
+    "lua_notify_player_rename lua_notify_map_change sv_notify_record", "date", "time")
 
   local handler = gladiator_config.get_vote_handler(config_options)
 
