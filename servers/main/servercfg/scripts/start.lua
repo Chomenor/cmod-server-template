@@ -13,6 +13,13 @@ local config_options = {
     -- Transfer rate limit in KB/s for UDP downloads, shared across all clients.
     -- Set to 0 for no limit (recommended for hosted servers).
     --sv_dlRate = 0,
+
+    -- Password for admin spectator mode.
+    -- Connect using "/set password spect_abc" on client (replace abc with password).
+    --sv_adminSpectatorPassword = "abc",
+
+    -- Enable automatic server-side recording. May consume significant disk space.
+    --sv_recordAutoRecording = 1,
   },
 
   rotation = function()
