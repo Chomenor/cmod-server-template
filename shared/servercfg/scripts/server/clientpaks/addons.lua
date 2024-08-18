@@ -6,8 +6,8 @@ Handle adding known client-side pk3s to the pure and download lists.
 
 local addons = core.init_module()
 
-local utils = require("scripts/common/core/utils")
-local svutils = require("scripts/common/server/svutils")
+local utils = require("scripts/core/utils")
+local svutils = require("scripts/server/svutils")
 
 ---------------------------------------------------------------------------------------
 function addons.add_cmod_paks(ref_set)

@@ -4,10 +4,10 @@
 Handles entity preprocessing during map loading.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local loader = require("scripts/common/server/entities/parser")
-local q3convert = require("scripts/common/server/entities/q3convert")
-local logging = require("scripts/common/core/logging")
+local utils = require("scripts/core/utils")
+local loader = require("scripts/server/entities/parser")
+local q3convert = require("scripts/server/entities/q3convert")
+local logging = require("scripts/core/logging")
 
 local entityprocess = core.init_module()
 

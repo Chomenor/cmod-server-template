@@ -4,8 +4,8 @@
 Misc server functions used by other scripts.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local logging = require("scripts/common/core/logging")
+local utils = require("scripts/core/utils")
+local logging = require("scripts/core/logging")
 
 local svutils = core.init_module()
 

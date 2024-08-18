@@ -5,9 +5,9 @@ Alternative configstring handling implementation. Adds support for serverinfo an
 events, which allow other modules to customize serverinfo and systeminfo on a per-client basis.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local svutils = require("scripts/common/server/svutils")
-local logging = require("scripts/common/core/logging")
+local utils = require("scripts/core/utils")
+local svutils = require("scripts/server/svutils")
+local logging = require("scripts/core/logging")
 
 local configstrings = core.init_module()
 

@@ -4,9 +4,9 @@
 Support extra preprocessing for client chat commands.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local logging = require("scripts/common/core/logging")
-local svutils = require("scripts/common/server/svutils")
+local utils = require("scripts/core/utils")
+local logging = require("scripts/core/logging")
+local svutils = require("scripts/server/svutils")
 
 local MAX_MSG_LEN = 149
 

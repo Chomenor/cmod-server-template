@@ -17,10 +17,10 @@ Variables:
 maploader.map_info: map info of currenly loading/running map, set before calling lua_mapscript
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local json = require("scripts/common/libs/json")
-local configstrings = require("scripts/common/server/configstrings")
-local logging = require("scripts/common/core/logging")
+local utils = require("scripts/core/utils")
+local json = require("scripts/libs/json")
+local configstrings = require("scripts/server/configstrings")
+local logging = require("scripts/core/logging")
 
 local maploader = core.init_module()
 

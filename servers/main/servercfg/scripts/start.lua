@@ -1,7 +1,7 @@
 -- start.lua
-com.run_file("scripts/common/core/core.lua")
+com.run_file("scripts/core/core.lua")
 
-local server_template = require("scripts/common/server/test_configs/server")
+local server_template = require("scripts/server/test_configs/server")
 local config_options = {
   -- cvars that are always set on map startup
   general_cvars = {

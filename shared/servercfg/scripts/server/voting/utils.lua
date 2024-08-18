@@ -4,8 +4,8 @@
 Misc voting utilities.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local logging = require("scripts/common/core/logging")
+local utils = require("scripts/core/utils")
+local logging = require("scripts/core/logging")
 
 local voting_utils = core.init_module()
 

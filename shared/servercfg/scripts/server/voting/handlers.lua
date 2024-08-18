@@ -5,15 +5,15 @@ This module provides some template handlers, which can be loaded by the server c
 to process different kinds of vote commands.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local vote_utils = require("scripts/common/server/voting/utils")
-local config_utils = require("scripts/common/server/misc/config_utils")
+local utils = require("scripts/core/utils")
+local vote_utils = require("scripts/server/voting/utils")
+local config_utils = require("scripts/server/misc/config_utils")
 
 local vote_handlers = core.init_module()
 
 ---------------------------------------------------------------------------------------
 function vote_handlers.get_map_handler(is_admin)
-  local maploader = require("scripts/common/server/maploader")
+  local maploader = require("scripts/server/maploader")
 
   return function(args)
     local cmd = args:get(1).val

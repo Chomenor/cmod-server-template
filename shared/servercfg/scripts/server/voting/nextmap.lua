@@ -4,10 +4,10 @@
 Handle pending voted next map.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local logging = require("scripts/common/core/logging")
-local svutils = require("scripts/common/server/svutils")
-local rotation = require("scripts/common/server/rotation")
+local utils = require("scripts/core/utils")
+local logging = require("scripts/core/logging")
+local svutils = require("scripts/server/svutils")
+local rotation = require("scripts/server/rotation")
 
 local nextmap = core.init_module()
 nextmap.pending = nil

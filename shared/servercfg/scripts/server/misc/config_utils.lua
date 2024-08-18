@@ -1,11 +1,11 @@
--- server/misc/utils.lua
+-- server/misc/config_utils.lua
 
 --[[===========================================================================================
 Misc utility functions for server and mod config.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local logging = require("scripts/common/core/logging")
+local utils = require("scripts/core/utils")
+local logging = require("scripts/core/logging")
 
 local config_utils = core.init_module()
 

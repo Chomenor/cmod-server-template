@@ -6,8 +6,8 @@ and sv_floodProtect cvars are set. Improves chat rate limit to allow short burst
 Also supports limiting userinfo (player name) updates and team changes.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local svutils = require("scripts/common/server/svutils")
+local utils = require("scripts/core/utils")
+local svutils = require("scripts/server/svutils")
 
 local floodprotect = core.init_module()
 

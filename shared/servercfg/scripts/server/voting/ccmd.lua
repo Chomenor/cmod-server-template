@@ -6,8 +6,8 @@ running the vote. The "vote_exec" command can be used to run any kind of vote. I
 the "map" command can also be overridden to process map commands like a vote.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local voting_utils = require("scripts/common/server/voting/utils")
+local utils = require("scripts/core/utils")
+local voting_utils = require("scripts/server/voting/utils")
 
 local ccmd = core.init_module()
 

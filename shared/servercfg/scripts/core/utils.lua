@@ -498,6 +498,6 @@ function utils.print_table(object)
   utils.print(utils.object_to_string(object))
 end
 
-logging = require("scripts/common/core/logging")
+logging = require("scripts/core/logging")
 
 return utils

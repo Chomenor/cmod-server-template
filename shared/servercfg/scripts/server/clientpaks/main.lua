@@ -11,11 +11,11 @@ pakrefs.local_state = {
 }
 local ls = pakrefs.local_state
 
-local utils = require("scripts/common/core/utils")
-local svutils = require("scripts/common/server/svutils")
-local cshandling = require("scripts/common/server/configstrings")
-local logging = require("scripts/common/core/logging")
-local maploader = require("scripts/common/server/maploader")
+local utils = require("scripts/core/utils")
+local svutils = require("scripts/server/svutils")
+local cshandling = require("scripts/server/configstrings")
+local logging = require("scripts/core/logging")
+local maploader = require("scripts/server/maploader")
 
 --[[===========================================================================================
 MISC

@@ -7,12 +7,12 @@ Experimental server template.
 local module = core.init_module()
 
 function module.init_server(config_options)
-  local logging = require("scripts/common/core/logging")
-  local gladiator_config = require("scripts/common/server/test_configs/gladiator")
-  local voting_vote = require("scripts/common/server/voting/vote")
-  local voting_ccmd = require("scripts/common/server/voting/ccmd")
-  local rotation = require("scripts/common/server/rotation")
-  require("scripts/common/server/misc/chat_filter")
+  local logging = require("scripts/core/logging")
+  local gladiator_config = require("scripts/server/test_configs/gladiator")
+  local voting_vote = require("scripts/server/voting/vote")
+  local voting_ccmd = require("scripts/server/voting/ccmd")
+  local rotation = require("scripts/server/rotation")
+  require("scripts/server/misc/chat_filter")
 
   logging.init_console_log("console", false)
   logging.init_file_log("voting", "voting", "standard", "datetime")

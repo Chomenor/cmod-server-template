@@ -4,8 +4,8 @@
 Handles converting Q3 entities to EF.
 ===========================================================================================--]]
 
-local loader = require("scripts/common/server/entities/parser")
-local utils = require("scripts/common/core/utils")
+local loader = require("scripts/server/entities/parser")
+local utils = require("scripts/core/utils")
 
 local q3convert = core.init_module()
 

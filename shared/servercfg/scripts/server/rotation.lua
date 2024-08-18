@@ -5,7 +5,7 @@ Implements map rotation support for lua-based server configs. Supports "map_skip
 console command to skip to next map.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
+local utils = require("scripts/core/utils")
 
 local rotation = core.init_module()
 

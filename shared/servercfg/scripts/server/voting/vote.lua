@@ -4,11 +4,11 @@
 Handles running votes.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
-local svutils = require("scripts/common/server/svutils")
-local configstrings = require("scripts/common/server/configstrings")
-local logging = require("scripts/common/core/logging")
-local voting_utils = require("scripts/common/server/voting/utils")
+local utils = require("scripts/core/utils")
+local svutils = require("scripts/server/svutils")
+local configstrings = require("scripts/server/configstrings")
+local logging = require("scripts/core/logging")
+local voting_utils = require("scripts/server/voting/utils")
 
 local vote = core.init_module()
 

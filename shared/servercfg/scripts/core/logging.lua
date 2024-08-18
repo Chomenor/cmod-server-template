@@ -4,7 +4,7 @@
 Handles conditional print messages and logging to file.
 ===========================================================================================--]]
 
-local utils = require("scripts/common/core/utils")
+local utils = require("scripts/core/utils")
 
 local logging = core.init_module()
 
