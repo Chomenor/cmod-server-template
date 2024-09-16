@@ -327,7 +327,7 @@ utils.register_event_handler(sv.events.pre_map_start, function(context, ev)
       table.insert(manifest_entries, "#currentmap_pak")
     end
   end
-  com.cvar_set("fs_download_manifest", table.concat(manifest_entries, " "))
+  com.cvar_force_set("fs_download_manifest", table.concat(manifest_entries, " "))
 
   -- this shouldn't actually be used, but set fs_pure_manifest to avoid engine clearing
   -- sv_pure due to it being empty or causing unnecessary warnings
@@ -335,7 +335,7 @@ utils.register_event_handler(sv.events.pre_map_start, function(context, ev)
   table.insert(manifest_entries, "baseEF/pak2:3960871590")
   table.insert(manifest_entries, "baseEF/pak1:596947475")
   table.insert(manifest_entries, "baseEF/pak0:3376297517")
-  com.cvar_set("fs_pure_manifest", table.concat(manifest_entries, " "))
+  com.cvar_force_set("fs_pure_manifest", table.concat(manifest_entries, " "))
 
   context:call_next(ev)
 end, "pakrefs_main")
@@ -365,10 +365,10 @@ utils.register_event_handler(sv.events.pre_map_start_infocs, function(context, e
   logging.print("Generating common pak refs", "PAKREFS")
   refs:log_references("PAKREFS")
 
-  com.cvar_set("sv_paks", ref_state.pure_hashes)
-  com.cvar_set("sv_pakNames", ref_state.pure_names)
-  com.cvar_set("sv_referencedPaks", ref_state.download_hashes)
-  com.cvar_set("sv_referencedPakNames", ref_state.download_names)
+  com.cvar_force_set("sv_paks", ref_state.pure_hashes)
+  com.cvar_force_set("sv_pakNames", ref_state.pure_names)
+  com.cvar_force_set("sv_referencedPaks", ref_state.download_hashes)
+  com.cvar_force_set("sv_referencedPakNames", ref_state.download_names)
 
   context:call_next(ev)
 end, "pakrefs_main")

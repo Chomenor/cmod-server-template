@@ -139,10 +139,10 @@ local function handle_map_command(context, ev)
   utils.start_cmd_context(function()
     utils.printf("Running map launch script...")
 
-    com.cvar_set("lua_mapcmd", lua_mapcmd)
+    com.cvar_force_set("lua_mapcmd", lua_mapcmd)
     utils.printf(' - lua_mapcmd set to "%s"', lua_mapcmd)
 
-    com.cvar_set("lua_mapname", lua_mapname)
+    com.cvar_force_set("lua_mapname", lua_mapname)
     utils.printf(' - lua_mapname set to "%s"', lua_mapname)
 
     local mapscript = lua_mapscript:string()

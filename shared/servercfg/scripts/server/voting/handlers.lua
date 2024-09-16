@@ -218,7 +218,7 @@ function vote_handlers.get_gladiator_powerup_handler()
       local state = config_utils.import_gladiator_flags(com.cvar_get_string(entry.cvar), entry.sequence)
       state = utils.set_union(state, enable_flags)
       state = utils.set_subtract(state, disable_flags)
-      com.cvar_set(entry.cvar, config_utils.export_gladiator_flags(state, entry.sequence))
+      config_utils.set_cvar(entry.cvar, config_utils.export_gladiator_flags(state, entry.sequence))
     end
   end
 

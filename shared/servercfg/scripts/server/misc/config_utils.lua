@@ -21,8 +21,11 @@ function config_utils.set_cvar(name, value)
   elseif type(value) == "boolean" then
     value = utils.if_else(value, "1", "0")
   end
+
   if type(value) == "string" then
-    com.cvar_set(name, tostring(value))
+    -- use regular "set" command so cvars aren't considered "engine" cvars
+    -- and can be reset via normal cvar_restart
+    com.cmd_exec(string.format('set "%s" "%s"', name, value), "now")
   else
     logging.print(string.format("WARNING: config_utils.set_cvar invalid type for %s", name),
       "WARNINGS", logging.PRINT_CONSOLE)

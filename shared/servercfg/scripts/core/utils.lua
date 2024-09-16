@@ -398,7 +398,7 @@ function utils.cvar_get(name, default_value, flags)
   end
 
   function cvar:set(value)
-    com.cvar_set(self.name, value)
+    com.cvar_force_set(self.name, value)
   end
 
   return cvar

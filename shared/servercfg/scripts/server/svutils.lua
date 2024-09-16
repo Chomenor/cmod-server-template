@@ -88,7 +88,7 @@ end
 
 ---------------------------------------------------------------------------------------
 -- Reset session when client connects.
-utils.register_event_handler(sv.events.pre_client_connect, function(context, ev)
+utils.register_event_handler(sv.events.init_client_slot, function(context, ev)
   svutils.clients[ev.client] = {}
   context:call_next(ev)
 end, "svutils-init_client_session", 1000)

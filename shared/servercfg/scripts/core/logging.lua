@@ -14,11 +14,20 @@ local ls = logging.internal
 
 ls.loggers = {}
 ls.stack_frames = {}
+ls.suppress_print_handler = false
 
 -- values must match engine
 logging.PRINT_NONE = 0
 logging.PRINT_DEVELOPER = 1
 logging.PRINT_CONSOLE = 2
+
+---------------------------------------------------------------------------------------
+-- Write console output to engine without triggering recursive calls.
+local function print_no_callback(text)
+  ls.suppress_print_handler = true
+  com.print(text)
+  ls.suppress_print_handler = false
+end
 
 ---------------------------------------------------------------------------------------
 -- Converts print condition string to table format.
@@ -177,7 +186,7 @@ function logging.init_console_log(conditions, stack_logging)
 
   -- logger.write function
   function logger.write(logger, text)
-    com.print(text)
+    print_no_callback(text)
   end
 end
 
@@ -268,7 +277,7 @@ function logging.print(message, conditions, printlevel, entity, parms)
       write_message(ls.conlog, message, true, entity, entity_stack)
     elseif printlevel == logging.PRINT_CONSOLE or (printlevel == logging.PRINT_DEVELOPER and
           com.cvar_get_integer("developer") ~= 0) then
-      com.print(conmsg)
+      print_no_callback(conmsg)
     end
   end
 end
@@ -335,8 +344,8 @@ end, "logging")
 
 ---------------------------------------------------------------------------------------
 -- Handle engine print commands such as Com_Printf and Logging_Printf.
-utils.register_event_handler(com.events.log_print, function(context, ev)
-  if not ev.in_redirect then
+utils.register_event_handler(com.events.console_print, function(context, ev)
+  if not ev.in_redirect and not ls.suppress_print_handler then
     -- Output the message to applicable loggers.
     logging.print(ev.text, ev.conditions, ev.printlevel, nil, { no_auto_newline = ev.no_auto_newline })
     ev.suppress = true
