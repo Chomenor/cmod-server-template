@@ -20,7 +20,7 @@ vote.vote_fails = {}
 ---------------------------------------------------------------------------------------
 -- Returns whether voting system is enabled.
 local function vote_enabled()
-  return utils.to_boolean(vote.handler)
+  return utils.to_boolean(vote.handler) and com.cvar_get_integer("g_allowVote") ~= 0
 end
 
 --[[===========================================================================================
