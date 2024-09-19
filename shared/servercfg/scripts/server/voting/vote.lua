@@ -227,12 +227,11 @@ end, "voting_vote")
 -- Check status of currently running vote.
 utils.register_event_handler(com.events.post_frame, function(context, ev)
   if vote.current_vote and not vote.current_vote.intermission_suspend_remaining then
-    local status = svutils.get_intermission_status()
-    if status == "empty" then
+    if svutils.count_players() == 0 then
       -- abort vote due to no players
       vote.current_vote = nil
       configstrings.set_configstring(configstrings.const.CS_VOTE_TIME, "0", true)
-    elseif status == "intermission" then
+    elseif svutils.intermission_state == svutils.const.IS_ACTIVE then
       -- suspend vote until next map restart
       vote.current_vote.intermission_suspend_remaining = vote.current_vote.end_time - sv.get_sv_time()
       configstrings.set_configstring(configstrings.const.CS_VOTE_TIME, "0", true)
@@ -351,7 +350,7 @@ utils.register_event_handler(svutils.events.client_cmd_prefix .. "callvote", fun
       end
 
       -- check for intermission and fail limit
-      if svutils.get_intermission_status() ~= "normal" then
+      if svutils.intermission_state == svutils.const.IS_ACTIVE then
         error({ msg = "Can\'t vote during intermission." })
       end
       local fail_wait_time = get_fail_wait_time(get_vote_fails(caller_address_no_port))

@@ -19,12 +19,18 @@ CONSTANTS
 svutils.const = {
   MAX_CLIENTS = 128,
   CS_INTERMISSION = 14,
+
+  -- intermission state
+  IS_INACTIVE = 0,
+  IS_QUEUED = 1,
+  IS_ACTIVE = 2,
 }
 
 svutils.events = {
   client_cmd_prefix = "svutils_clientcmd_",
   post_server_frame = "svutils_post_server_frame",
   intermission_start = "svutils_intermission_start",
+  intermission_state_changed = "svutils_intermission_state_changed",
 }
 
 --[[===========================================================================================
@@ -39,23 +45,6 @@ local function split_address(address)
   port = port or "none"
   ip = string.match(ip, "^%[(.*)%]$") or ip -- strip ipv6 brackets
   return ip, port
-end
-
----------------------------------------------------------------------------------------
--- Returns whether game is currently in intermission. This check only works if there
--- are players in the game, so "empty" is returned if there are no active players.
-function svutils.get_intermission_status()
-  for client = 0, svutils.const.MAX_CLIENTS - 1 do
-    if svutils.client_is_connected(client) then
-      local pm_type = string.unpack("i4", sv.get_playerstate_data(client, 4, 4))
-      if pm_type == 5 then
-        return "intermission"
-      else
-        return "normal"
-      end
-    end
-  end
-  return "empty"
 end
 
 local svs_time_elapsed_prev = sv.get_svs_time()
@@ -211,26 +200,75 @@ end
 INTERMISSION DETECTION
 ===========================================================================================--]]
 
-svutils.in_intermission = false
+svutils.intermission_state = svutils.const.IS_INACTIVE
+
+local intermission_state_names = {
+  [svutils.const.IS_INACTIVE] = "inactive",
+  [svutils.const.IS_QUEUED] = "queued",
+  [svutils.const.IS_ACTIVE] = "active",
+}
 
 ---------------------------------------------------------------------------------------
--- Detect intermission start from game module CS_INTERMISSION set.
+-- Update intermission state and issue event.
+local function set_intermission_state(new_state)
+  local old_state = svutils.intermission_state
+  if old_state ~= new_state then
+    svutils.intermission_state = new_state
+    logging.print(string.format("Lua intermission state changed from '%s' to '%s'",
+        intermission_state_names[old_state], intermission_state_names[new_state]),
+      "LUA_INTERMISSION_STATE")
+    utils.run_event({
+      name = svutils.events.intermission_state_changed,
+      old_state = old_state,
+      new_state = new_state,
+    })
+  end
+end
+
+---------------------------------------------------------------------------------------
+-- Check for fully active (not just queued) intermission by looking for clients with
+-- pm_type == PM_INTERMISSION. This check only works if there are players in the
+-- game, so "empty" is returned if there are no active players.
+local function get_intermission_status()
+  for client = 0, svutils.const.MAX_CLIENTS - 1 do
+    if svutils.client_is_connected(client) then
+      local pm_type = string.unpack("i4", sv.get_playerstate_data(client, 4, 4))
+      if pm_type == 5 then
+        return "intermission"
+      else
+        return "normal"
+      end
+    end
+  end
+  return "empty"
+end
+
+---------------------------------------------------------------------------------------
+-- Detect transition to queued intermission from game module CS_INTERMISSION set.
 utils.register_event_handler(sv.events.set_configstring, function(context, ev)
-  if not svutils.in_intermission and ev.index == svutils.const.CS_INTERMISSION and ev.value == "1" then
-    svutils.in_intermission = true
-    utils.run_event({ name = svutils.events.intermission_start })
+  if ev.index == svutils.const.CS_INTERMISSION and ev.value == "1" and
+      svutils.intermission_state == svutils.const.IS_INACTIVE then
+    set_intermission_state(svutils.const.IS_QUEUED)
+  end
+  context:call_next(ev)
+end, "svutils-intermission", 1000)
+
+---------------------------------------------------------------------------------------
+-- Check for transition from queued to active intermission.
+utils.register_event_handler(com.events.post_frame, function(context, ev)
+  if svutils.intermission_state == svutils.const.IS_QUEUED and
+      get_intermission_status() ~= "normal" then
+    set_intermission_state(svutils.const.IS_ACTIVE)
   end
   context:call_next(ev)
 end, "svutils-intermission", 1000)
 
 ---------------------------------------------------------------------------------------
 -- Reset intermission status on map start or restart.
-for _, event in ipairs({ sv.events.pre_map_start, sv.events.pre_map_restart }) do
-  utils.register_event_handler(event, function(context, ev)
-    svutils.in_intermission = false
-    context:call_next(ev)
-  end, "svutils-intermission", 1000)
-end
+utils.register_event_handler(sv.events.pre_game_init, function(context, ev)
+  set_intermission_state(svutils.const.IS_INACTIVE)
+  context:call_next(ev)
+end, "svutils-intermission", 1000)
 
 --[[===========================================================================================
 TIMERS

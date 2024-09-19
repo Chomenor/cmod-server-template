@@ -26,7 +26,7 @@ function nextmap.set_nextmap(action, map_name)
   }
   logging.print(string.format("Pending nextmap set to '%s'.", map_name), "VOTING", logging.PRINT_CONSOLE)
   svutils.start_timer("nextmap-alert", 180000, function()
-    if svutils.get_intermission_status() ~= "normal" then
+    if svutils.intermission_state == svutils.const.IS_ACTIVE then
       return 60000
     end
     sv.send_servercmd(nil, string.format(
