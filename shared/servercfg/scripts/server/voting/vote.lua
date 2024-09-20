@@ -209,10 +209,16 @@ utils.register_event_handler(svutils.events.client_cmd_prefix .. "vote", functio
     end
 
     if register_vote(ev.client, value) then
+      local _, _, voter_address = svutils.get_split_address(ev.client)
+      logging.print(string.format("Client %i (%s / %s) voted %s.\n",
+        ev.client, voter_address, svutils.get_client_name(ev.client),
+        utils.if_else(value == "y", "yes", "no")), "VOTING")
       sv.send_servercmd(ev.client, 'print "Vote cast.\n"')
       render_vote(false)
       local pass, fail = check_intermediate_result()
       if pass or fail then
+        logging.print(string.format("Vote %s due to mid-vote result.",
+          utils.if_else(pass, "passed", "failed")), "VOTING")
         finish_vote(pass)
       end
     else
@@ -238,6 +244,8 @@ utils.register_event_handler(com.events.post_frame, function(context, ev)
     elseif sv.get_sv_time() > vote.current_vote.end_time then
       -- vote time expired - run final check if it passed
       local passed = check_final_result()
+      logging.print(string.format("Vote %s due to end-of-countdown result.",
+        utils.if_else(passed, "passed", "failed")), "VOTING")
       finish_vote(passed)
     end
   end
@@ -302,15 +310,15 @@ utils.register_event_handler(svutils.events.client_cmd_prefix .. "callvote", fun
       local client_name = svutils.get_client_name(ev.client)
       local arguments = voting_utils.get_arguments(1)
 
-      logging.print(string.format("Callvote request - client(%i / %s / %s) command(%s)\n",
-      ev.client, caller_address, client_name, debug_arg_string()), "VOTING")
+      logging.print(string.format('Callvote request "%s" from client %i (%s / %s)\n',
+        debug_arg_string(), ev.client, caller_address, client_name), "VOTING")
 
       -- invoke handler to process vote parameters
       local result = vote.handler(arguments, false)
       assert(result)
       assert(result.exec)
       assert(result.info_string)
-      logging.print(string.format("Have info string '%s'\n", result.info_string), "VOTING")
+      logging.print(string.format('Have info string "%s"\n', result.info_string), "VOTING")
 
       -- check for in progress vote
       if vote.current_vote then
@@ -360,7 +368,7 @@ utils.register_event_handler(svutils.events.client_cmd_prefix .. "callvote", fun
 
       -- start the countdown
       local counts = count_voters(vote.current_vote.voters)
-      logging.print(string.format("Vote started with %i voters.\n",
+      logging.print(string.format("Vote started with %i eligible voters.\n",
         counts.yes + counts.no + counts.undecided), "VOTING")
       render_vote(true)
       sv.send_servercmd(nil, string.format('print "%s^7 called a vote.\n"', client_name))
@@ -381,9 +389,9 @@ utils.register_event_handler(svutils.events.client_cmd_prefix .. "callvote", fun
       err_info.msg = err_info.msg or "An error occurred processing the vote command."
 
       sv.send_servercmd(ev.client, string.format('print "%s\n"', err_info.msg))
-      logging.print(string.format("  message: %s\n", err_info.log_msg or err_info.msg), "VOTING")
+      logging.print(string.format("Vote not started: %s\n", err_info.log_msg or err_info.msg), "VOTING")
       if err_info.detail then
-        logging.print(string.format("  detail: %s\n", err_info.detail), "VOTING")
+        logging.print(string.format("Additional information: %s\n", err_info.detail), "VOTING")
       end
     end
   else
