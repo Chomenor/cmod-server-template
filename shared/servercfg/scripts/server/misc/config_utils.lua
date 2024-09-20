@@ -15,7 +15,7 @@ config_utils.const = {
 
 ---------------------------------------------------------------------------------------
 -- Set cvar with support for several types (string, number, boolean).
-function config_utils.set_cvar(name, value)
+function config_utils.set_cvar(name, value, serverinfo)
   if type(value) == "number" then
     value = tostring(value)
   elseif type(value) == "boolean" then
@@ -25,7 +25,11 @@ function config_utils.set_cvar(name, value)
   if type(value) == "string" then
     -- use regular "set" command so cvars aren't considered "engine" cvars
     -- and can be reset via normal cvar_restart
-    com.cmd_exec(string.format('set "%s" "%s"', name, value), "now")
+    if serverinfo then
+      com.cmd_exec(string.format('sets "%s" "%s"', name, value), "now")
+    else
+      com.cmd_exec(string.format('set "%s" "%s"', name, value), "now")
+    end
   else
     logging.print(string.format("WARNING: config_utils.set_cvar invalid type for %s", name),
       "WARNINGS", logging.PRINT_CONSOLE)
@@ -33,10 +37,20 @@ function config_utils.set_cvar(name, value)
 end
 
 ---------------------------------------------------------------------------------------
-function config_utils.set_cvar_table(cvar_table)
+function config_utils.set_cvar_table(cvar_table, serverinfo)
   for name, value in pairs(cvar_table or {}) do
-    config_utils.set_cvar(name, value)
+    config_utils.set_cvar(name, value, serverinfo)
   end
+end
+
+---------------------------------------------------------------------------------------
+-- Returns a cvar table containing the current value of all cvars in the input table.
+function config_utils.store_current_cvars(cvar_table)
+  local output = {}
+  for name, value in pairs(cvar_table or {}) do
+    output[name] = com.cvar_get_string(name)
+  end
+  return output
 end
 
 ---------------------------------------------------------------------------------------

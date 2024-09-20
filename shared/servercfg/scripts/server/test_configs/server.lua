@@ -12,6 +12,7 @@ function module.init_server(config_options)
   local voting_vote = require("scripts/server/voting/vote")
   local voting_ccmd = require("scripts/server/voting/ccmd")
   local rotation = require("scripts/server/rotation")
+  local config_utils = require("scripts/server/misc/config_utils")
   require("scripts/server/misc/chat_filter")
 
   logging.init_console_log("console", false)
@@ -31,6 +32,10 @@ function module.init_server(config_options)
 
   -- Configure rotation.
   rotation.set_rotation(config_options.rotation)
+
+  -- Set modifiable cvar initial values.
+  config_utils.set_cvar_table(config_options.modifiable_cvars)
+  config_utils.set_cvar_table(config_options.modifiable_serverinfo_cvars, true)
 
   -- Launch first map.
   com.cmd_exec("map_skip")

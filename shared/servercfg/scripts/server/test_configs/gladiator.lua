@@ -166,6 +166,9 @@ function module.get_vote_handler(config_options)
     -- Called when starting a new map.
     local function run_map()
       -- reset cvars for each map
+      local saved_cvars = config_utils.store_current_cvars(config_options.modifiable_cvars)
+      local saved_serverinfo_cvars = config_utils.store_current_cvars(
+        config_options.modifiable_serverinfo_cvars)
       utils.context_run_cmd("cvar_restart")
 
       -- set default cvars
@@ -205,8 +208,11 @@ function module.get_vote_handler(config_options)
       config_utils.set_cvar("cfg_gladiator_random_weapons", random_weapon_string)
       set_gladiator_random_weapons()
 
-      -- set general cvars from server config
+      -- set general cvars from server config and restore modifiable cvars
+      config_utils.set_cvar_table(saved_cvars)
+      config_utils.set_cvar_table(saved_serverinfo_cvars, true)
       config_utils.set_cvar_table(config_options.general_cvars)
+      config_utils.set_cvar_table(config_options.serverinfo_cvars, true)
 
       -- set gametype from vote parameters
       if vote_state.commands.ffa then
