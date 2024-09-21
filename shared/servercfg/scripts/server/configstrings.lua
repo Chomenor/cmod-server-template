@@ -111,9 +111,8 @@ function configstrings.set_configstring(index, val, force_send)
         if force_send or (sess.configstrings[index] or "") ~= clientVal then
           sess.configstrings[index] = clientVal
           send_configstring(client, index, clientVal)
-          logging.print(
-            string.format("configstring (update): client(%i) index(%i) value(%s)\n", client, index, clientVal),
-            "CONFIGSTRINGS", logging.PRINT_DEBUG, client)
+          logging.print(string.format("configstring (update): client(%i) index(%i) value(%s)\n",
+            client, index, clientVal), "CONFIGSTRINGS")
         end
       else
         utils.print(string.format("set_configstring: client %i invalid session", client))
@@ -163,7 +162,7 @@ utils.register_event_handler(sv.events.update_configstring, function(context, ev
           sess.configstrings[index] = ls.baseValues[index]
           send_configstring(ev.client, index, newValue)
           logging.print(string.format("configstring (post-gamestate): client(%i) index(%i) value(%s)\n",
-            ev.client, index, newValue), "CONFIGSTRINGS", logging.PRINT_DEBUG, ev.client)
+            ev.client, index, newValue), "CONFIGSTRINGS")
         end
       end
     else
@@ -186,7 +185,7 @@ local function init_client_configstrings(client)
     if value ~= "" then
       sess.configstrings[index] = value
       logging.print(string.format("configstring (gamestate): client(%i) index(%i) value(%s)\n",
-        client, index, value), "CONFIGSTRINGS", logging.PRINT_DEBUG, client)
+        client, index, value), "CONFIGSTRINGS")
     end
   end
 end

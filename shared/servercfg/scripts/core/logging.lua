@@ -32,23 +32,15 @@ end
 ---------------------------------------------------------------------------------------
 -- Converts print condition string to table format.
 -- Example:
--- "warnings!1#4 info" => {warnings={priority=1, entity=4}, info={priority=0}}
+-- "warnings!1 info" => {warnings={priority=1}, info={priority=0}}
 ---@param conditions string?
 local function parse_conditions(conditions)
   local output = {}
 
   if conditions then
     for token in string.gmatch(string.lower(conditions), "%S+") do
-      local priority, entity
-      local condition, flags = string.match(token, "([^#!]*)(.*)")
-      if flags == "" then
-        output[condition] = { priority = 0 }
-      else
-        output[condition] = {
-          priority = utils.to_integer(string.match(flags, "!([^#!]+)")) or 0,
-          entity = utils.to_integer(string.match(flags, "#([^#!]+)"))
-        }
-      end
+      local condition, flags = string.match(token, "([^!]*)(.*)")
+      output[condition] = { priority = (flags ~= "" and utils.to_integer(flags:sub(2))) or 0 }
     end
   end
 
@@ -57,43 +49,14 @@ end
 
 ---------------------------------------------------------------------------------------
 -- Returns true if event conditions satisfy logger conditions for the message to be written.
-local function check_conditions(eventConditions, entity_stack, loggerConditions)
+local function check_conditions(eventConditions, loggerConditions)
   for condition, loggerDetail in pairs(loggerConditions) do
     local eventDetail = eventConditions[condition]
-    if eventDetail and eventDetail.priority >= loggerDetail.priority and
-        (not loggerDetail.entity or #entity_stack == 0 or
-          utils.set(table.unpack(entity_stack))[loggerDetail.entity]) then
+    if eventDetail and eventDetail.priority >= loggerDetail.priority then
       return true
     end
   end
   return false
-end
-
----------------------------------------------------------------------------------------
--- Returns list of all entities on the current debug stack, plus an additional entity appended.
--- For example, if the current stack has one function call with entity 3, and another with entity 5,
--- and this function is called with entity 10, it will return {3, 5, 10}.
---
--- Duplicate entities are ignored, e.g. if current stack is {3, 5} and this function is called with
--- entity 5, it will just return {3, 5}. Also can be called with nil to just return current stack.
-local function append_entity_stack(entity)
-  local entity_stack = #ls.stack_frames > 0 and ls.stack_frames[#ls.stack_frames].entity_stack or {}
-  if entity and entity ~= entity_stack[#entity_stack] then
-    local entity_stackCopy = { table.unpack(entity_stack) }
-    table.insert(entity_stackCopy, entity)
-    return entity_stackCopy
-  end
-  return entity_stack
-end
-
----------------------------------------------------------------------------------------
--- Returns string representation of entity stack for use in print statements.
--- Returns empty string for empty stack, or formatted string otherwise.
-local function entity_stack_to_string(fmt, entity_stack)
-  if #entity_stack == 0 then
-    return ""
-  end
-  return string.format(fmt, table.concat(entity_stack, "/"))
 end
 
 ---------------------------------------------------------------------------------------
@@ -191,7 +154,7 @@ function logging.init_console_log(conditions, stack_logging)
 end
 
 ---------------------------------------------------------------------------------------
-local function write_message(logger, message, write_position, write_entities, entity_stack)
+local function write_message(logger, message, write_position)
   local output = {}
 
   if not logger.awaiting_newline then
@@ -209,15 +172,6 @@ local function write_message(logger, message, write_position, write_entities, en
     if logger.stack_frames and write_position then
       table.insert(output, string.format("[%i]", logger.stack_position))
     end
-
-    -- Write entity stack if either stack logging is enabled, or this particular message
-    -- had a specific entity number attached to it.
-    if logger.stack_frames and write_position or write_entities then
-      local entityString = entity_stack_to_string("{%s}", entity_stack)
-      if entityString ~= "" then
-        table.insert(output, entityString)
-      end
-    end
   end
 
   logger.awaiting_newline = (message:sub(-1) ~= '\n')
@@ -230,11 +184,9 @@ end
 ---@param message string Message to log.
 ---@param conditions string? Formatted condition string.
 ---@param printlevel integer? 0 = no console print, 1 = developer mode print, 2 = normal print
----@param entity integer? Indicate an entity number associated with this message
-function logging.print(message, conditions, printlevel, entity, parms)
+function logging.print(message, conditions, printlevel, parms)
   parms = parms or {}
   local pconditions = parse_conditions(conditions)
-  local entity_stack = append_entity_stack(entity)
 
   -- If conditions are set, default to info print (conditions only), otherwise console print
   if not printlevel then
@@ -260,13 +212,13 @@ function logging.print(message, conditions, printlevel, entity, parms)
 
   -- Write to file logs.
   for k, logger in pairs(ls.loggers) do
-    if check_conditions(pconditions, entity_stack, logger.conditions) then
-      write_message(logger, message, true, entity, entity_stack)
+    if check_conditions(pconditions, logger.conditions) then
+      write_message(logger, message, true)
     end
   end
 
   -- Write to console.
-  if not ls.conlog or check_conditions(pconditions, entity_stack, ls.conlog.conditions) then
+  if not ls.conlog or check_conditions(pconditions, ls.conlog.conditions) then
     local conmsg = message
     if printlevel and printlevel == 1 then
       -- add color to developer messages as per quake3e convention
@@ -274,7 +226,7 @@ function logging.print(message, conditions, printlevel, entity, parms)
     end
 
     if ls.conlog then
-      write_message(ls.conlog, message, true, entity, entity_stack)
+      write_message(ls.conlog, message, true)
     elseif printlevel == logging.PRINT_CONSOLE or (printlevel == logging.PRINT_DEVELOPER and
           com.cvar_get_integer("developer") ~= 0) then
       print_no_callback(conmsg)
@@ -290,12 +242,12 @@ local function update_logger_frames(logger)
     while #ls.stack_frames > #logger.stack_frames do
       local source_frame = ls.stack_frames[#logger.stack_frames + 1]
       local condition_match = source_frame.conditions and check_conditions(
-        parse_conditions(source_frame.conditions), source_frame.entity_stack, logger.conditions)
+        parse_conditions(source_frame.conditions), logger.conditions)
       if condition_match then
         -- Frame meets debug conditons for this logger.
         table.insert(logger.stack_frames, { active = true, name = source_frame.name })
-        write_message(logger, string.format("[%i -> %i]%s Entering %s\n", logger.stack_position,
-          logger.stack_position + 1, entity_stack_to_string(" {%s}", source_frame.entity_stack), source_frame.name))
+        write_message(logger, string.format("[%i -> %i] Entering %s\n", logger.stack_position,
+          logger.stack_position + 1, source_frame.name))
         logger.stack_position = logger.stack_position + 1
       else
         -- Frame doesn't meet debug conditions.
@@ -325,7 +277,6 @@ utils.register_event_handler(com.events.log_frame, function(context, ev)
     local info = com.log_frame_get(#ls.stack_frames + 1)
     table.insert(ls.stack_frames, {
       name = info.name or "<unknown>",
-      entity_stack = append_entity_stack(info.entity),
       conditions = info.conditions
     })
   end
@@ -347,7 +298,8 @@ end, "logging")
 utils.register_event_handler(com.events.console_print, function(context, ev)
   if not ev.in_redirect and not ls.suppress_print_handler then
     -- Output the message to applicable loggers.
-    logging.print(ev.text, ev.conditions, ev.printlevel, nil, { no_auto_newline = ev.no_auto_newline })
+    logging.print(ev.text, ev.conditions, ev.printlevel,
+      { no_auto_newline = ev.no_auto_newline })
     ev.suppress = true
   end
 end, "logging")

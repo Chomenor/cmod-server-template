@@ -165,11 +165,11 @@ function pakrefs.ReferenceSet()
   end
 
   ---------------------------------------------------------------------------------------
-  function rs:log_references(conditions, client)
+  function rs:log_references(conditions)
     for _, ref in ipairs(self:get_sorted_references(true, true)) do
       local type = ((ref.download_source and "D") or "") .. ((ref.pure and "P") or "")
       local msg = string.format("  %s name(%s) hash(%i)\n", type, ref.name, ref.hash)
-      logging.print(msg, conditions, logging.PRINT_NONE, client)
+      logging.print(msg, conditions)
     end
   end
 
@@ -281,7 +281,7 @@ utils.register_event_handler(cshandling.events.send_systeminfo, function(context
     svutils.clients[ev.client].ref_state, refs = generate_reference_state(ev.client)
 
     logging.print(string.format('Generating pak references for client %i\n', ev.client), "PAKREFS")
-    refs:log_references("PAKREFS", ev.client)
+    refs:log_references("PAKREFS")
   end
 
   -- Add current references to systeminfo message
