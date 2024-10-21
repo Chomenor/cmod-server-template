@@ -1,0 +1,19 @@
+{
+  "paks": {
+    "baseEF/pakcmod-release-2023-09-18": {
+      "force_http_share": true,
+      "profile": "support_pak",
+      "sha256": "de4cbb61bfb290cbc475d034c4382dc30aa3f89949ab3a3671dc462f75ac365a"
+    },
+    "baseEF/pakcmod-stock-2023-02-07": {
+      "force_http_share": true,
+      "profile": "support_pak",
+      "sha256": "8d8230a3b492436b0c96471ced401c8e0bdc85d4eaaace2d055a738f2c9412c0"
+    }
+  },
+  "server_resources": {
+    "servercfg_cmod/pakcmod-release-2023-09-18.pk3": {
+      "sha256": "de4cbb61bfb290cbc475d034c4382dc30aa3f89949ab3a3671dc462f75ac365a"
+    }
+  }
+}

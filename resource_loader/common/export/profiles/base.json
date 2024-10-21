@@ -1,0 +1,292 @@
+{
+  "paks": {
+    "baseEF/pak0": {
+      "mapcfg__brig": {
+        "aas": "0c8b9eecd3e298ef5e61ee76ebe4f3091ac852a9df5b66dca348d0cbd43dc84c"
+      },
+      "mapcfg__holodeck_camelot": {
+        "aas": "1b083ff29ff46d546f90d86d8ba149ade736c7abdddf35dc272622aad378c42d"
+      },
+      "mapcfg__holodeck_highnoon": {
+        "aas": "eb42bfc7460da02dfc0505a56f64f735bfe33f1ac52e75a95db6b1da4fb25fbf"
+      },
+      "mapcfg__holodeck_temple": {
+        "aas": "6df18332b11bdc32068077a8954aaaa626f021da5ba30feaa589a76de7296cf1"
+      },
+      "mapcfg_borg1": {
+        "aas": "ec8b02702cb38ffbc376062f6a764d5edba3df6c15e62126cd817264dcbdec56"
+      },
+      "mapcfg_borg2": {
+        "aas": "a764cf4d66e59bee728b5c6382b720f0e6c3a12950464aacec265042824dea9e"
+      },
+      "mapcfg_borg3": {
+        "aas": "51ae8535372607f4004443d869d2d6f39b38aff128a65cd67afd60e575d36811"
+      },
+      "mapcfg_borg4": {
+        "aas": "4912c56b9b05c517afdf2d11d2e4d17460ad78b3b1d4650bbc5fee9853ddb5f6"
+      },
+      "mapcfg_borg5": {
+        "aas": "7089dfdff874bdd70f79cb916b271cead616c9e0158e32dc99daf082e51f0852"
+      },
+      "mapcfg_borg6": {
+        "notes": "prefer pak1 version",
+        "skip": true
+      },
+      "mapcfg_ctf_voy1": {
+        "aas": "e3ea4f87c8ed3e88a3c58a65e9b35f6e182106d6f275b3db357319e8cd33fa10",
+        "notes": "this recompiled aas seems to improve bot behavior"
+      },
+      "mapcfg_dn1": {
+        "aas": "6667a7bf186c96d55e30b2c2f881f699057d736d757f9f168e74acf5720c64bf"
+      },
+      "mapcfg_dn2": {
+        "aas": "fd14616dda744934cd22ba0484a969777eff06923893a07f312c1bc76339ad22"
+      },
+      "mapcfg_dn3": {
+        "aas": "930457888b4a68883f7ea03aff4c99d23c0fad434ebd58abb64d517d026607f2"
+      },
+      "mapcfg_dn4": {
+        "aas": "7dd9f32a64edd1a0a5ec63996c3be8c750713d5fd07ae62856ed88e3dbd4819c"
+      },
+      "mapcfg_dn5": {
+        "aas": "b4b59e7aaf7a6fc6a2cbdbe156b1c978fd874a9d44b65af74ab08470b64ef347"
+      },
+      "mapcfg_dn6": {
+        "aas": "a3e72b90a62db5f78184c2381549b51990d3153a8f3f30a0f89d64c59cfdf865"
+      },
+      "mapcfg_dn8": {
+        "aas": "18253d14c7bb54ff2de4716a1f05530ac066950db204bf6e7795dcb9d6decdee"
+      },
+      "mapcfg_forge1": {
+        "aas": "46fd9bc9a729b652455d4e242881766f1612f96a2242716d9403a634dbab7344"
+      },
+      "mapcfg_forge2": {
+        "aas": "445bf63a5cc6f30025cef73f7e1fea65fc67a43f17ed29ece9bc769569668f91"
+      },
+      "mapcfg_forge3": {
+        "aas": "87463dac3f693a5ac182bc30077cc9d84f2d6245ad17ac5b89abb5bb6cc81d17"
+      },
+      "mapcfg_forge4": {
+        "aas": "99e703a999eaf37a67a561fa440114a52952424ad72eb28040afaa21fda0c54d"
+      },
+      "mapcfg_forge5": {
+        "aas": "49c0be836289fe63f327c9265c9a69bb83066c31f876c50b1dea4af505f075d6"
+      },
+      "mapcfg_forgeboss": {
+        "aas": "2b8dbe9f3a031a864f80a0aa4898b1a1cb6633185d1b38bf7361ca064deaf31c"
+      },
+      "mapcfg_hm_borg2": {
+        "entity_edit": [
+          [
+            {
+              "origin": "96 -184 64"
+            },
+            {
+              "origin": "96 -184 36"
+            }
+          ]
+        ],
+        "notes": "entity edit to fix spectator spawn stuck in ceiling"
+      },
+      "mapcfg_hm_dn2": {
+        "entity_edit": [
+          [
+            {
+              "origin": "2160 1152 248"
+            },
+            {
+              "origin": "2160 1152 228"
+            }
+          ]
+        ],
+        "notes": "entity edit to fix spectator spawn stuck in ceiling"
+      },
+      "mapcfg_holodeck": {
+        "aas": "3f74bf6287629e02c301d209e5e26d30faddac222eadfcdbc846096ca028a9ec"
+      },
+      "mapcfg_scav1": {
+        "aas": "6b3af2920dc472486a583dd5e39b3bafa66d7104eb99e41099f74d09335895a8"
+      },
+      "mapcfg_scav2": {
+        "aas": "aedd3fabb3d0fef8303ed8ae31a671c499a52e7ed7fae8c53db55f9dde91d86b"
+      },
+      "mapcfg_scav3": {
+        "aas": "c28a284657828742a47786771f7dfce970d4899428fe1baa53db2917a5aaab16"
+      },
+      "mapcfg_scav3b": {
+        "aas": "a5bb35ca6cc146d546bde972608435395817386e71710b7cae0e7866c90e3e70"
+      },
+      "mapcfg_scav4": {
+        "aas": "b12c5812fed68a22d7ee29062f856a4233f1f2b3869c07d225790abc8269c56e"
+      },
+      "mapcfg_scav5": {
+        "aas": "8cfdceee9c003d918ee29f553081e7a66046242eed919fc44a81eb3c85e9d0dd"
+      },
+      "mapcfg_scavboss": {
+        "aas": "e74744296f3dc31426e11ab1756c2f7c92594429d944c908136a19248f392f08"
+      },
+      "mapcfg_stasis1": {
+        "aas": "142585d11bae841aacac1f79b19684c59289f9b72041a9b1e2c762b7a9e7bee8"
+      },
+      "mapcfg_stasis2": {
+        "aas": "427d5ee87c7a459fc83deef85c4fdc73fd394f2de12d9e9613d668a8cc75ba50"
+      },
+      "mapcfg_stasis3": {
+        "notes": "prefer pak1 version",
+        "skip": true
+      },
+      "mapcfg_tutorial": {
+        "aas": "5cb66e04f1fd4fac21c8d34ba28f47963afb764d600c992b35dc3188a0a19991"
+      },
+      "mapcfg_voy1": {
+        "aas": "82449a58c8eb3111cdb44f673a11afd7c3d17c97ddbac5cf26f818a6dae2b01a"
+      },
+      "mapcfg_voy13": {
+        "aas": "7b49a9a4dde3281b4e87c9817f7e025911505a80cfcc2626596ccc4c6ab9d1b8"
+      },
+      "mapcfg_voy14": {
+        "aas": "feb0c14b6929df57db6129fe4e44cce11a95a11698b4eca0fcb7b6d3358c132a"
+      },
+      "mapcfg_voy15": {
+        "aas": "3eb23bd7d36dd4a16c9cfea7991eb3a1335f885059cb4e9dda107ce24ff80cd6"
+      },
+      "mapcfg_voy16": {
+        "aas": "88b36131f8551efd3d76a434edcd4db367c694cb8884db0aed4ca8b9ea48200a"
+      },
+      "mapcfg_voy17": {
+        "aas": "1a6e3893e6c0142164d0026d3628281d94dc3544154167ddcc565db679160769"
+      },
+      "mapcfg_voy2": {
+        "aas": "cd013620657385314a8ef0cbf704b184728eb09b93014777b609c0ae5f11252b"
+      },
+      "mapcfg_voy20": {
+        "aas": "3af234f611ba8b302683561ee7d2cc4cc3a5a7a3b8113942c131e0e115fdee00"
+      },
+      "mapcfg_voy3": {
+        "aas": "277ecd4ff869141fc7d12263a31d30e3f6886cf86f428aed50682d8feefd87e7"
+      },
+      "mapcfg_voy4": {
+        "aas": "422c6950971a8133213c3133e15c6ec63efc81e6a5fff3b654e36b2641c083dc"
+      },
+      "mapcfg_voy5": {
+        "aas": "ef8e524e5c8f94589e6941794746126dd2a2e573d430ecdac01627b21a5a3290"
+      },
+      "mapcfg_voy6": {
+        "aas": "6444679ce892a6599b6e55fb0941d4520ab97038829757bccb3a7f4fe597f932"
+      },
+      "mapcfg_voy7": {
+        "notes": "prefer pak1 version",
+        "skip": true
+      },
+      "mapcfg_voy8": {
+        "notes": "prefer pak1 version",
+        "skip": true
+      },
+      "mapcfg_voy9": {
+        "aas": "2125bf0d7abed23837e599e235b93ab1436b955cceac16154f58b05b6ffe97f6"
+      },
+      "profile": "base_paks",
+      "sha256": "f487bc872c1a8205e0c09134e4d63023ced8ba79c43538a0e0f6204e92430b74"
+    },
+    "baseEF/pak1-dl": {
+      "mapcfg_borg6": {
+        "aas": "89ff708a677a26c05f64c323f30aa8d953ba27b4678a86ede8b78feb1e7f2416"
+      },
+      "mapcfg_stasis3": {
+        "aas": "42b102e66c96b7e5b85980309209bc7e230f06cc18d4abe60bd3d7a62d2b24b4"
+      },
+      "mapcfg_voy7": {
+        "aas": "2a116655788dba32d2e616786332617df4524af58dc190d38a17b8602020d008"
+      },
+      "mapcfg_voy8": {
+        "aas": "4ee310e731bdb311b849b63e3be34e86da5ea15ff46bcfc7a0e84fcf7e4ab6ce"
+      },
+      "profile": "base_paks",
+      "sha256": "19412051c2e48d0f51c27127f38280d12401afaf53c38e3af4517768641600eb"
+    },
+    "baseEF/pak2-dl": {
+      "profile": "base_paks",
+      "sha256": "8b573723b6827b38974d6da1619f485f4cd66a0ef26d06a3d0135b5e80988e39"
+    },
+    "baseEF/pak3-dl": {
+      "mapcfg__holodeck_firingrange": {
+        "aas": "89e2f8bfe3b02b14ea4915e6c862ddfe4197ffaa437dd7f3df430bfba301248d"
+      },
+      "mapcfg__holodeck_garden": {
+        "aas": "64000a33a7e10db39cbfe7800c8b1b213686a2db12f2f4389df53ae5e7ce7d05"
+      },
+      "mapcfg__holodeck_minigame": {
+        "aas": "2276cc4d242a233c60e6b9973e73ce11b2a78f6d06c51224035b57c06e39904d"
+      },
+      "mapcfg__holodeck_proton": {
+        "aas": "ca439fed8f77cc980bee76b3caa53873b2a2c408a5afb9d6b50e95f9ac791981"
+      },
+      "mapcfg__holodeck_proton2": {
+        "aas": "7682f90d7af0ea8e5ed725f08ce9b8d3e849feabcc9b3f5bac4b8dc7b52a62d5"
+      },
+      "mapcfg__holodeck_warlord": {
+        "aas": "b4bd3f25d862f5d232976ab8bde6540e44cd89e186ffbfc66ba54aaa547cc725"
+      },
+      "profile": "base_paks",
+      "sha256": "6cdbbdd34276eb52f9a3d9b54a4ac95156f8abeced7eee05f26ffa85b538a175"
+    }
+  },
+  "profiles": {
+    "base_paks": {
+      "client_paks": {
+        "*map_pak": {
+          "dep_group": 300,
+          "download": "yes",
+          "priority": 300.999,
+          "pure": "yes"
+        },
+        "baseEF/pak0": {
+          "dep_group": 500,
+          "download": "no",
+          "priority": 500.996,
+          "pure": "yes"
+        },
+        "baseEF/pak1-dl": {
+          "dep_group": 500,
+          "download": "yes",
+          "priority": 500.997,
+          "pure": "yes"
+        },
+        "baseEF/pak2-dl": {
+          "dep_group": 500,
+          "download": "yes",
+          "priority": 500.998,
+          "pure": "yes"
+        },
+        "baseEF/pak3-dl": {
+          "dep_group": 500,
+          "download": "auto",
+          "priority": 500.999,
+          "pure": "yes"
+        }
+      },
+      "notes": "the -dl extension is to allow clients to download missing patch paks"
+    },
+    "support_pak": {
+      "notes": "this pk3 can be referenced as a dependency, but don't load maps from it",
+      "skip": true
+    }
+  },
+  "resource_urls": [
+    "http://74.91.116.133/stvef/resources/{hash}"
+  ],
+  "server_resources": {
+    "baseEF/pak0.pk3": {
+      "sha256": "f487bc872c1a8205e0c09134e4d63023ced8ba79c43538a0e0f6204e92430b74"
+    },
+    "baseEF/pak1.pk3": {
+      "sha256": "19412051c2e48d0f51c27127f38280d12401afaf53c38e3af4517768641600eb"
+    },
+    "baseEF/pak2.pk3": {
+      "sha256": "8b573723b6827b38974d6da1619f485f4cd66a0ef26d06a3d0135b5e80988e39"
+    },
+    "baseEF/pak3.pk3": {
+      "sha256": "6cdbbdd34276eb52f9a3d9b54a4ac95156f8abeced7eee05f26ffa85b538a175"
+    }
+  }
+}

@@ -4,36 +4,29 @@ For now the server only supports a basic Gladiator config. More features and mod
 
 ## Usage
 
-First run the [map loader](https://github.com/Chomenor/cmod-map-loader) to download maps and other resources.
-
-```
-git clone https://github.com/Chomenor/cmod-map-loader
-python3 cmod-map-loader/run_export.py
-```
-
-Clone the server config and enter the cmod-server-template directory.
+1) First clone the server config and enter the cmod-server-template directory.
 
 ```
 git clone https://github.com/Chomenor/cmod-server-template
 cd cmod-server-template
 ```
 
-Download the cMod engine alpha [release](https://github.com/Chomenor/cmod-engine-alpha/releases/tag/latest) and extract the dedicated server binary `cmod.ded.x64` to this directory.
+2) Download the cMod engine alpha [release](https://github.com/Chomenor/cmod-engine-alpha/releases/tag/latest) and extract the dedicated server binary `cmod.ded.x64` to the cmod-server-template directory.
 
-Edit the `servers/main/run.sh` file and change the EF_MAPDB line to the following (adjust the path if your location of the serverdata directory is different).
+3) Run the resource loader to download maps and other resources.
 
 ```
-EF_MAPDB="$EF_SERVER_DIR/../../../cmod-map-loader/output/data/serverdata"
+python3 resource_loader/run_export.py
 ```
 
-Commit the changes in git.
+4) Commit changes in git.
 
 ```
 git add -A
 git commit -m "initial server setup"
 ```
 
-Start the server with the following command. Note that in some environments the first startup may take some time.
+5) Start the server with the following command. Note that in some environments the first startup may take some time.
 
 ```
 servers/main/run.sh

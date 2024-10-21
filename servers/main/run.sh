@@ -12,14 +12,14 @@ EF_APP="$EF_SERVER_DIR/../../cmod.ded.x64"
 # Location of shared directory
 EF_SHARED_DIR="$EF_SERVER_DIR/../../shared"
 
+# Location of exported maploader files
+EF_MAPDB="$EF_SERVER_DIR/../../resource_loader/output/data/serverdata"
+
 # Server IP (Optional)
 #EF_IP4="1.2.3.4"
 
 # Server port (Optional)
 #EF_PORT="27960"
-
-# Location of exported maploader files (Optional)
-#EF_MAPDB="$EF_SERVER_DIR/../../../cmod-map-loader/output/data/serverdata"
 
 # Location of additional files shared between servers (Optional)
 #EF_ADDITIONAL="/some/path"
