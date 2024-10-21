@@ -13,9 +13,9 @@ def process():
 
   # Load manifest
   manifest = export.Manifest()
-  manifest.import_manifest(misc.read_json_file(f"{script_directory}/common/export/profiles/base.json"))
-  manifest.import_manifest(misc.read_json_file(f"{script_directory}/common/export/profiles/efmaps.json"))
-  manifest.import_manifest(misc.read_json_file(f"{script_directory}/common/export/profiles/mod_resources.json"))
+  manifest.import_manifest(misc.read_json_file(f"{script_directory}/profiles/base.json"))
+  manifest.import_manifest(misc.read_json_file(f"{script_directory}/profiles/efmaps.json"))
+  manifest.import_manifest(misc.read_json_file(f"{script_directory}/profiles/mod_resources.json"))
 
   # Additional directories to look for resources with hash as filename
   local_dirs = []
