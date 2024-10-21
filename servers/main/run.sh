@@ -10,7 +10,7 @@ EF_SERVER_DIR="$(dirname $0)"
 EF_APP="$EF_SERVER_DIR/../../cmod.ded.x64"
 
 # Location of shared directory
-EF_SHARED_DIR="$EF_SERVER_DIR/../../shared"
+EF_SHARED_DIR="$EF_SERVER_DIR/../../shared_config"
 
 # Location of exported maploader files
 EF_MAPDB="$EF_SERVER_DIR/../../resource_loader/output/data/serverdata"
