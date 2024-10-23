@@ -1,0 +1,12 @@
+{
+  "server_resources": {
+    "cmod.ded.x64": {
+      "notes": "https://github.com/Chomenor/cmod-engine-alpha/commit/11896c903059bd45d554b15e36344175c4581e94",
+      "sha256": "057b8ab2002038871dc60f8640db219a46a8894ab7b59c485f0bab6a39a8d4fd"
+    },
+    "cmod.ded.x64.exe": {
+      "notes": "https://github.com/Chomenor/cmod-engine-alpha/commit/11896c903059bd45d554b15e36344175c4581e94",
+      "sha256": "bf3db0548d1ef2b96766784eded7a0b1daaf6812ca8b617be04f951aa6f664d4"
+    }
+  }
+}
