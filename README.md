@@ -11,23 +11,33 @@ git clone https://github.com/Chomenor/cmod-server-template
 cd cmod-server-template
 ```
 
-2) Download the cMod engine alpha [release](https://github.com/Chomenor/cmod-engine-alpha/releases/tag/latest) and extract the dedicated server binary `cmod.ded.x64` to the cmod-server-template directory.
-
-3) Run the resource loader to download maps and other resources.
+2) Run the resource loader to download maps and other resources.
 
 ```
 python3 resource_loader/run_export.py
 ```
 
-4) Commit changes in git.
+3) Create a new server by copying the uam (Gladiator) template to the servers directory.
+
+```
+cp -rT --update=none server_manager/templates/uam server_manager/servers/myserver
+```
+
+4) Modify the `server_manager/servers/myserver/config.json` file. Set 'active' to true.
+
+You can also set 'public' to true if you want the server to be listed on public server lists.
+
+Also check the `server_manager/servers/myserver/servercfg/scripts/start.lua` file to adjust other server parameters.
+
+5) Commit changes in git.
 
 ```
 git add -A
 git commit -m "initial server setup"
 ```
 
-5) Start the server with the following command. Note that in some environments the first startup may take some time.
+6) Start the server with the following command. Note that in some environments the first startup may take some time.
 
 ```
-servers/main/run.sh
+python3 server_manager/manager.py
 ```

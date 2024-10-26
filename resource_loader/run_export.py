@@ -6,11 +6,12 @@ from common.export import export
 from common.utils import misc
 import os
 import sys
-script_directory = os.path.dirname(os.path.abspath(sys.argv[0]))
+script_directory = os.path.dirname(os.path.abspath(__file__))
+
+# Should match resource_output_directory in server_manager/manager.py
+output_directory = os.path.join(script_directory, "output")
 
 def process():
-  output_path = script_directory + "/output"
-
   # Load manifest
   manifest = export.Manifest()
   manifest.import_manifest(misc.read_json_file(f"{script_directory}/profiles/base.json"))
@@ -21,6 +22,6 @@ def process():
   # Additional directories to look for resources with hash as filename
   local_dirs = []
 
-  export.run_export(manifest, output_path, local_dirs)
+  export.run_export(manifest, output_directory, local_dirs)
 
 process()
