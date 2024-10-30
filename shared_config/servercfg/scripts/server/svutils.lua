@@ -62,6 +62,17 @@ function svutils.svs_time_elapsed()
   return svs_time_elapsed_counter
 end
 
+---------------------------------------------------------------------------------------
+-- Function to kick all bots since engine "kick allbots" command can have issues
+-- if a player is on the server named "allbots".
+function svutils.kick_all_bots()
+  for client = 0, svutils.const.MAX_CLIENTS - 1 do
+    if svutils.client_is_connected(client) and svutils.client_is_bot(client) then
+      com.cmd_exec(string.format("kick %i", client), "now")
+    end
+  end
+end
+
 --[[===========================================================================================
 CLIENT SESSIONS
 

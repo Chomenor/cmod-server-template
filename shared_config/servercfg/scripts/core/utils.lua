@@ -256,6 +256,16 @@ function utils.if_else(condition, p1, p2)
 end
 
 ---------------------------------------------------------------------------------------
+-- Call obj with the provided arguments if it is a function, otherwise return as-is.
+function utils.resolve_fn(obj, ...)
+  if type(obj) == "function" then
+    return obj(...)
+  else
+    return obj
+  end
+end
+
+---------------------------------------------------------------------------------------
 -- Generate a set, formatted as a table with elements mapped to true.
 function utils.set(...)
   local set = {}

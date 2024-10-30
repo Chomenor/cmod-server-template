@@ -6,18 +6,20 @@ to process different kinds of vote commands.
 ===========================================================================================--]]
 
 local utils = require("scripts/core/utils")
+local svutils = require("scripts/server/svutils")
 local vote_utils = require("scripts/server/voting/utils")
 local config_utils = require("scripts/server/misc/config_utils")
 
 local vote_handlers = core.init_module()
 
 ---------------------------------------------------------------------------------------
-function vote_handlers.get_map_handler(is_admin)
+function vote_handlers.get_map_handler(parms)
   local maploader = require("scripts/server/maploader")
 
   return function(args)
     local cmd = args:get(1).val
-    if cmd == "map" or cmd == "nextmap" or is_admin and (cmd == "devmap" or cmd == "spmap") then
+    if cmd == "map" and parms.enable_map or cmd == "nextmap" and parms.enable_nextmap or
+        (cmd == "devmap" or cmd == "spmap") and parms.enable_special then
       local result = {}
 
       result.tags = utils.set("map", "mapchange", "any")
@@ -80,7 +82,7 @@ function vote_handlers.get_numeric_handler(parms)
           error({ msg = string.format("%s already set.", result.user_parameter) })
         end
 
-        result.action = string.format('set "%s" "%s"', parms.cvar_name, result.value)
+        result.action = {string.format('set "%s" "%s"', parms.cvar_name, result.value), parms.extra_action}
         result.info = string.format("%s %s", parms.name, result.value)
       end
 
@@ -101,8 +103,9 @@ function vote_handlers.get_bots_handler(min, max)
       }
 
       function result.finalize(commands, finalize_state)
-        local min = finalize_state.min_bots or min
-        local max = finalize_state.max_bots or max
+        if finalize_state.per_team_bot_count_active then
+          max = math.floor(max / 2)
+        end
         if not result.value or result.value < min or result.value > max then
           error({
             msg = string.format("%s must be a value between %i and %i.",
@@ -110,8 +113,12 @@ function vote_handlers.get_bots_handler(min, max)
           })
         end
 
+        if result.value ~= 0 and finalize_state.botsupport == false then
+          error({ msg = "Map does not support bots." })
+        end
+
         -- convert 1 bot votes to 2 in ffa, since there will really only be 1 bot
-        -- left beside the player
+        -- left besides the player
         if finalize_state.gametype == "ffa" and result.value == 1 then
           result.value = 2
         end
@@ -122,12 +129,11 @@ function vote_handlers.get_bots_handler(min, max)
           error({ msg = "Bots already set." })
         end
 
-        local actions = {}
+        result.action = {string.format("set bot_minplayers %i", result.value)}
         if result.value == 0 then
-          table.insert(actions, "kick allbots")
+          table.insert(result.action, svutils.kick_all_bots)
         end
-        table.insert(actions, string.format("set bot_minplayers %i", result.value))
-        result.action = table.concat(actions, ";")
+
         result.info = string.format("bots %i", result.value)
       end
 
@@ -236,24 +242,24 @@ function vote_handlers.get_gladiator_powerup_handler()
 end
 
 ---------------------------------------------------------------------------------------
-function vote_handlers.get_gladiator_weapon_handler(enable_availableweps, enable_startingweps, enable_roundweps)
+function vote_handlers.get_gladiator_weapon_handler(parms)
   -- constants
   local valid_weapons_list = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "b" }
   local valid_weapons_set = utils.set(table.unpack(valid_weapons_list))
   local specifier_cmds = {
-    availableweps = (enable_availableweps and "availableweps") or nil,
-    availableweapons = (enable_availableweps and "availableweps") or nil,
-    startingweps = (enable_startingweps and "startingweps") or nil,
-    startingweapons = (enable_startingweps and "startingweps") or nil,
-    roundweps = (enable_roundweps and "roundweps") or nil,
-    roundweapons = (enable_roundweps and "roundweps") or nil,
+    availableweps = parms.enable_availableweps and "availableweps",
+    availableweapons = parms.enable_availableweps and "availableweps",
+    startingweps = parms.enable_startingweps and "startingweps",
+    startingweapons = parms.enable_startingweps and "startingweps",
+    roundweps = parms.enable_roundweps and "roundweps",
+    roundweapons = parms.enable_roundweps and "roundweps",
   }
   local preset_cmds = {}
-  if enable_availableweps or enable_startingweps then
-    preset_cmds.photons = { weapons = "8", type = (enable_startingweps and "startingweps") or "availableweps" }
+  if parms.enable_availableweps or parms.enable_startingweps then
+    preset_cmds.photons = { weapons = "8", type = (parms.enable_startingweps and "startingweps") or "availableweps" }
     preset_cmds.photon = preset_cmds.photons
   end
-  if enable_availableweps then
+  if parms.enable_availableweps then
     preset_cmds.allweapons = { weapons = "123456789b", type = "availableweps" }
     preset_cmds.allweps = preset_cmds.allweapons
     preset_cmds.allwep = preset_cmds.allweapons
@@ -362,7 +368,7 @@ function vote_handlers.get_gladiator_weapon_handler(enable_availableweps, enable
   return function(args)
     if parse_cmd(args) then
       output = {
-        tags = utils.set("custom_weapons", "any"),
+        tags = utils.set("weapons", "normal_weapons", "any"),
         reparse = parse_cmd,
         finalize = finalize,
       }

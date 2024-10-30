@@ -171,18 +171,26 @@ function voting_utils.generate_info(commands, ordering)
 end
 
 ---------------------------------------------------------------------------------------
+-- Run "action" which can be a function, console command string, or list of actions
+function voting_utils.run_action(action, key, command)
+  if type(action) == "function" then
+    action(command)
+  elseif type(action) == "string" then
+    utils.context_run_cmd(action)
+  elseif type(action) == "table" then
+    for _, element in ipairs(action) do
+      voting_utils.run_action(element, key, command)
+    end
+  elseif action then
+    logging.print(string.format("WARNING: vote_utils.run_action - unrecognized action for %s",
+      key), "VOTING WARNINGS", logging.PRINT_CONSOLE)
+  end
+end
+
+---------------------------------------------------------------------------------------
 function voting_utils.run_actions(commands, ordering)
   for key, command in pairs(commands) do
-    if command.action then
-      if type(command.action) == "string" then
-        utils.context_run_cmd(command.action)
-      elseif type(command.action) == "function" then
-        command.action()
-      else
-        logging.print(string.format("WARNING: vote_utils.run_actions - unrecognized action for %s", key),
-          "VOTING", logging.PRINT_CONSOLE)
-      end
-    end
+    voting_utils.run_action(command.action, key, command)
   end
 end
 

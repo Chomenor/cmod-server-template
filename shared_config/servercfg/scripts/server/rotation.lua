@@ -48,10 +48,7 @@ end
 
 ---------------------------------------------------------------------------------------
 local function run_rotation_entry(entry)
-  local cmd = string.format('map "%s"', entry.name)
-  if entry.args then
-    cmd = cmd .. " " .. entry.args
-  end
+  local cmd = string.format('map "%s" %s in_rotation', entry.name, entry.args or "")
   utils.start_cmd_context(function()
     utils.context_run_cmd(cmd)
   end)

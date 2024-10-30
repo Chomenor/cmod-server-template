@@ -14,9 +14,20 @@ config_utils.const = {
 }
 
 ---------------------------------------------------------------------------------------
--- Set cvar with support for several types (string, number, boolean).
-function config_utils.set_cvar(name, value, serverinfo)
-  if type(value) == "number" then
+-- Set cvar with support for several types:
+-- function is called with arguments in parms.fn_args
+-- nil is ignored (nothing is set)
+-- number and boolean are converted to string
+function config_utils.set_cvar(name, value, parms)
+  parms = parms or {}
+
+  if type(value) == "function" then
+    value = value(table.unpack(parms.fn_args or {}))
+  end
+
+  if value == nil then
+    return
+  elseif type(value) == "number" then
     value = tostring(value)
   elseif type(value) == "boolean" then
     value = utils.if_else(value, "1", "0")
@@ -25,7 +36,7 @@ function config_utils.set_cvar(name, value, serverinfo)
   if type(value) == "string" then
     -- use regular "set" command so cvars aren't considered "engine" cvars
     -- and can be reset via normal cvar_restart
-    if serverinfo then
+    if parms.serverinfo then
       com.cmd_exec(string.format('sets "%s" "%s"', name, value), "now")
     else
       com.cmd_exec(string.format('set "%s" "%s"', name, value), "now")
@@ -37,9 +48,21 @@ function config_utils.set_cvar(name, value, serverinfo)
 end
 
 ---------------------------------------------------------------------------------------
-function config_utils.set_cvar_table(cvar_table, serverinfo)
+function config_utils.set_cvar_table(cvar_table, parms)
   for name, value in pairs(cvar_table or {}) do
-    config_utils.set_cvar(name, value, serverinfo)
+    config_utils.set_cvar(name, value, parms)
+  end
+end
+
+---------------------------------------------------------------------------------------
+function config_utils.set_warmup(value)
+  value = utils.to_integer(value)
+  if value and value > 0 then
+    config_utils.set_cvar("g_warmup", value)
+    config_utils.set_cvar("g_doWarmup", 1)
+  else
+    config_utils.set_cvar("g_warmup", 0)
+    config_utils.set_cvar("g_doWarmup", 0)
   end
 end
 
@@ -71,10 +94,19 @@ function config_utils.import_gladiator_flags(flags_str, keys)
 end
 
 ---------------------------------------------------------------------------------------
-function config_utils.export_gladiator_flags(flags_obj, keys)
+-- Generates Gladiator flag string in "YYYN" format
+-- Flags can be either set (utils.set("a", "b", "c")) or string ("abc")
+function config_utils.export_gladiator_flags(flags, keys)
   local output = {}
+  if type(flags) == "string" then
+    local flags_str = flags
+    flags = {}
+    for char in flags_str:gmatch(".") do
+      flags[char] = true
+    end
+  end
   for idx, key in ipairs(keys) do
-    table.insert(output, (flags_obj[key] and "Y") or "N")
+    table.insert(output, (flags[key] and "Y") or "N")
   end
   return table.concat(output)
 end
@@ -99,23 +131,111 @@ end
 ---------------------------------------------------------------------------------------
 -- Generates multi-line print statement, inserting newlines as needed to prevent
 -- phrases from being divided across two lines.
-function config_utils.print_layout(phrases)
-  local buffer = {}
-  local position
-  for _, phrase in ipairs(phrases) do
-    local len = config_utils.get_print_length(phrase)
-    if not position then
-      position = len
-    elseif position + len > 77 then
-      table.insert(buffer, "\n")
-      position = len
-    else
-      table.insert(buffer, " ")
-      position = position + len + 1
+function config_utils.print_formatter()
+  local output = {
+    buffer = {},
+    line_position = 0,
+  }
+
+  function output:add_newline(count)
+    for _ = 1, count or 1 do
+      table.insert(output.buffer, "\n")
     end
-    table.insert(buffer, phrase)
+    output.line_position = 0
   end
-  return table.concat(buffer)
+
+  function output:add_block(text)
+    local len = config_utils.get_print_length(text)
+    if output.line_position > 0 and output.line_position + len > 76 then
+      output:add_newline()
+      table.insert(output.buffer, text)
+      output.line_position = len
+    else
+      if output.line_position > 0 then
+        table.insert(output.buffer, " ")
+        output.line_position = output.line_position + 1
+      end
+      table.insert(output.buffer, text)
+      output.line_position = output.line_position + len
+    end
+  end
+
+  function output:add_blocks(blocks)
+    for _, block in ipairs(blocks) do
+      output:add_block(block)
+    end
+  end
+
+  function output:get_string()
+    return table.concat(output.buffer, "")
+  end
+
+  return output
+end
+
+---------------------------------------------------------------------------------------
+-- Print formatter with extra tweaks like comma support.
+function config_utils.enhanced_formatter()
+  local output = {
+    formatter = config_utils.print_formatter(),
+    hold_entry = nil,
+  }
+
+  local function flush(add_comma)
+    if output.hold_entry then
+      if add_comma then
+        output.formatter:add_block(output.hold_entry .. ",")
+      else
+        output.formatter:add_block(output.hold_entry)
+      end
+      output.hold_entry = nil
+    end
+  end
+
+  function output:add_newline(count)
+    flush(false)
+    output.formatter:add_newline(count)
+  end
+
+  function output:add_block(text, prepend_comma)
+    if text then
+      flush(prepend_comma)
+      output.hold_entry = text
+    end
+  end
+
+  function output:add_blocks(blocks, prepend_commas)
+    for _, block in ipairs(blocks) do
+      output:add_block(block, prepend_commas)
+    end
+  end
+
+  function output:get_string()
+    flush(false)
+    return output.formatter:get_string()
+  end
+
+  return output
+end
+
+---------------------------------------------------------------------------------------
+-- Converts list of vote options like {"ffa", "teams"} to [ffa|teams]
+-- nil elements are ignored. nil is returned if no elements are given.
+function config_utils.build_bracket_group(elements, bracket_single)
+  local filtered = {}
+  for _, entry in ipairs(elements) do
+    if entry then
+      table.insert(filtered, entry)
+    end
+  end
+  local count = utils.count_elements(filtered)
+  if count >= 2 or (count == 1 and bracket_single) then
+    return string.format("[%s]", table.concat(filtered, "|"))
+  elseif count == 1 then
+    return table.concat(filtered, "|")
+  else
+    return nil
+  end
 end
 
 return config_utils

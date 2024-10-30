@@ -16,6 +16,7 @@ chat_filter.internal = {}
 local ls = chat_filter.internal
 
 local lua_tellShowIp = utils.cvar_get("lua_tellShowIp", "0")
+local lua_suppressBotTeamChat = utils.cvar_get("lua_suppressBotTeamChat", "0")
 
 ---------------------------------------------------------------------------------------
 -- Returns partial IP address for tell client list.
@@ -112,7 +113,8 @@ for _, cmd in ipairs({ "say", "say_team", "tell" }) do
         log_chat_message(ev.client, msg, string.format(" to Client %i", tgt_client))
         sv.exec_client_cmd(ev.client, string.format('"%s" %i "%s"', cmd, tgt_client, msg))
       end
-    elseif com.argc() >= 2 then
+    elseif com.argc() >= 2 and not (lua_suppressBotTeamChat:boolean() and
+          cmd == "say_team" and svutils.client_is_bot(ev.client)) then
       local msg = sanitize_chat_message(concat_args(1))
       log_chat_message(ev.client, msg, utils.if_else(cmd == "say_team", " to Team", ""))
       sv.exec_client_cmd(ev.client, string.format('"%s" "%s"', cmd, msg))
