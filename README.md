@@ -1,8 +1,6 @@
 This is an experimental configuration for ST:V Elite Force multiplayer servers, designed to be used with the new [cMod engine](https://github.com/Chomenor/cmod-engine-alpha).
 
-For now the server only supports a basic Gladiator config. More features and modes may be added in the future.
-
-## Usage
+## Example Usage
 
 1) First clone the server config and enter the cmod-server-template directory.
 
@@ -17,10 +15,10 @@ cd cmod-server-template
 python3 resource_loader/run_export.py
 ```
 
-3) Create a new server by copying the uam (Gladiator) template to the servers directory.
+3) Create a new server by copying one of the servers (e.g. "standard" or "uam") from the "server_manager/templates" directory to the "server_manager/servers" directory. For example:
 
 ```
-cp -rT --update=none server_manager/templates/uam server_manager/servers/myserver
+cp -rT --update=none server_manager/templates/standard server_manager/servers/myserver
 ```
 
 4) Modify the `server_manager/servers/myserver/config.json` file. Set 'active' to true.

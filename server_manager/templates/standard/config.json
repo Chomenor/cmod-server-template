@@ -1,0 +1,10 @@
+{
+  "active": false,
+  "public": false,
+  "ip6_enabled": true,
+  "port": 27960,
+  "port6": 27960,
+  "ip": "0.0.0.0",
+  "ip6": "::",
+  "restart_count": 0
+}
