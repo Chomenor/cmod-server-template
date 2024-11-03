@@ -35,12 +35,12 @@ servers = {}
 
 def log_message(msg):
   with open(os.path.join(manager_directory, "manager.log"), "a", encoding="utf-8") as logfile:
-    logfile.write(f"{time.strftime("%Y-%m-%d %H:%M:%S")} {msg}\n")
+    logfile.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {msg}\n")
   print(msg)
 
 def log_server_message(server_name, msg):
   with open(os.path.join(servers_directory, server_name, "manager.log"), "a", encoding="utf-8") as logfile:
-    logfile.write(f"{time.strftime("%Y-%m-%d %H:%M:%S")} {msg}\n")
+    logfile.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {msg}\n")
   print(f"{server_name}: {msg}")
 
 def make_executable(file_path):
@@ -262,7 +262,7 @@ async def main():
     for server_name, server_config in new_config.servers.items():
       if server_config.get("error") and server_config.get("error") != \
           current_config.servers.get("server_name", {}).get("error"):
-        log_server_message(server_name, f"Error reading config: {server_config["error"]}")
+        log_server_message(server_name, f"Error reading config: {server_config['error']}")
     current_config = new_config
 
     await update_servers(new_config, sock)
