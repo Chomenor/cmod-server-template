@@ -56,7 +56,7 @@ function module.init_server(config)
       enable_startingweps = config.enable_starting_weapon_vote or vote_state.is_admin,
       enable_roundweps = config.enable_round_weapon_vote or vote_state.is_admin,
     })
-    if vote_state.enable_powerup_vote or vote_state.is_admin then
+    if config.enable_powerup_vote or vote_state.is_admin then
       vote_state.handlers.powerups = handlers.get_gladiator_powerup_handler()
     end
 
