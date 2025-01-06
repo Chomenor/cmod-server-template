@@ -4896,6 +4896,10 @@
       "profile": "eliteforce",
       "sha256": "f05d8fa6d10a9c34c9de54c9602d4e110eb8d6f666802e9aa2a8ccbd294cf16f"
     },
+    "baseEF/ef_minecraft": {
+      "profile": "eliteforce",
+      "sha256": "dad783521fd1ef4c929ed4725a742199fb89394017552c52f9eda4229b80ce93"
+    },
     "baseEF/ef_nsstreets": {
       "profile": "eliteforce",
       "sha256": "fb8f7021219d98961a579621aaff0b8b82b88344426038865b8589753254ba98"
@@ -9213,6 +9217,10 @@
     "baseEF/z-iso2-ctf": {
       "profile": "eliteforce",
       "sha256": "a1ee1b5e66047c53d203572bdcfd4fa258cf2a1236b58382d4a42602351cc333"
+    },
+    "baseEF/zab20": {
+      "profile": "eliteforce",
+      "sha256": "2788ba8121781d226f0daaa318f1637963f7d718332603c0061f80ecac5dea81"
     },
     "baseEF/zab2_rpg_tmp": {
       "mapcfg_ab2_rpg_tmp": {
