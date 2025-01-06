@@ -126,11 +126,13 @@ class FileExporter():
       os.link(pk3.full_path, self.output_dir.get_write_path("httpshare/paks/%s/%s.pk3" % (pk3.mod_dir, pk3.filename)))
       self.http_written.add(pk3.full_name)
   
-  def write_mirror_resource(self, res_hash:ResourceHash, importer:FileImporter, description:str):
+  def write_mirror_resource_direct(self, res_hash:ResourceHash, get_src_path:typing.Callable, description:str):
     if not res_hash in self.mirror_written:
-      src_path = importer.get_path(res_hash)
-      os.link(src_path, self.output_dir.get_write_path("httpshare/resources/%s" % res_hash))
+      os.link(get_src_path(), self.output_dir.get_write_path("httpshare/resources/%s" % res_hash))
       self.mirror_written.setdefault(res_hash, set()).add(description)
+
+  def write_mirror_resource(self, res_hash:ResourceHash, importer:FileImporter, description:str):
+    self.write_mirror_resource_direct(res_hash, lambda: importer.get_path(res_hash), description)
   
   def get_mirror_resource_log(self) -> str:
     return '\n'.join(["%s - %s" % (res_hash, str(list(descriptions))) \
@@ -202,7 +204,7 @@ def write_resource_pk3(read, cache_dir:misc.DirectoryHandler, resource_hash:str,
       tgt.writestr(internal_name, data, compress_type=zipfile.ZIP_DEFLATED, compresslevel=4)
   return full_path, internal_name
 
-def run_export(manifest:Manifest, output_path:str, local_dirs:list[str] = []):
+def run_export(manifest:Manifest, output_path:str, local_dirs:list[str] = [], keep_old_mirror:bool=False):
   base_dir = misc.DirectoryHandler(output_path)
   cache_dir = base_dir.get_subdir("cache")
   data_out_dir = base_dir.get_subdir("data_new")
@@ -501,6 +503,18 @@ def run_export(manifest:Manifest, output_path:str, local_dirs:list[str] = []):
       file_exporter.write_mirror_resource(entry["sha256"], file_importer, "server resource - %s" % path)
     except Exception as ex:
       index_logger.log_info(f"Failed to load server resource {path}")
+
+  # Keep mirror resources from previous export so other servers with slightly older manifest
+  # can still download needed files
+  if keep_old_mirror:
+    try:
+      old_mirror_dir = base_dir.get_subdir(os.path.join("data", "httpshare", "resources"))
+      if os.path.exists(old_mirror_dir.path):
+        for resource in os.listdir(old_mirror_dir.path):
+          file_exporter.write_mirror_resource_direct(
+            resource, lambda: old_mirror_dir.get_read_path(resource), "old resource")
+    except Exception as ex:
+      index_logger.log_info(f"Failed to load old mirror files: {ex}")
 
   # Update logs
   warnings_out.extend([line for line in index_logger.get_messages(misc.Logger.TYPE_WARNING)])
