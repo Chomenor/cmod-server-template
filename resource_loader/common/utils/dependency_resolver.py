@@ -372,6 +372,6 @@ def log_dependencies(res:ResolvedDependencies, ms:MinimumSources, logger:misc.Lo
       logger.log_info(f"  satisfies dependency: {dependency}")
       for asset in res[dependency].assets:
         if asset.source == source:
-          logger.log_info(f"  with: {asset}")
+          logger.log_info(f"    with: {asset}")
       for ref in res[dependency].descriptions:
-        logger.log_info(f"  referenced by: {ref}")
+        logger.log_info(f"    referenced by: {ref}")
