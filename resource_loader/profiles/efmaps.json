@@ -4820,6 +4820,10 @@
       "profile": "eliteforce",
       "sha256": "c5c6244ba90152c23ae1b9779f63b19316442151c025d8300f9e6cbd627cd6a7"
     },
+    "baseEF/ef_cambridge": {
+      "profile": "eliteforce",
+      "sha256": "1533254eff2c01df4f3586e147171bf99a922b0adb43eb544242185d1914728a"
+    },
     "baseEF/ef_canyon": {
       "profile": "eliteforce",
       "sha256": "0373e6f575f403b8f4c10540f11881ad75e628b3e9d6f620f574dac4f5636083"
