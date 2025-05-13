@@ -122,7 +122,10 @@ class Dependency(abc.ABC):
   dependency_type = "unknown"
 
   def __init__(self, name:str, optional=False):
-    self.name = misc.strip_ext(name).lower()
+    # Normalize name to match asset format
+    self.name = misc.strip_ext(name).lower().replace("\\", "/")
+    if self.name.startswith("/"):
+      self.name = self.name[1:]
     self.optional = optional
 
   def __eq__(self, other:"Dependency"):
