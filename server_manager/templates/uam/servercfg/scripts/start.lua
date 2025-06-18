@@ -121,6 +121,21 @@ config.bot_skill = 0 -- 1=weakest, 5=strongest, 0=special (same as skill 1 but n
 config.bot_standard_chat = false
 config.bot_team_chat = false
 
+-- Spawn invulnerability time in seconds (can be fractional like 0.5) (original: 5)
+config.general_cvars.g_ghostRespawn = function(vote_state)
+  if vote_state.gametype == "ctf" then
+    if vote_state.weapon_mode == "sniper" then return 1 end
+    return 1
+  end
+  if vote_state.match_mode == "dm" then
+    if vote_state.weapon_mode == "sniper" then return 1 end
+    return 1
+  end
+  -- regular gladiator
+  if vote_state.weapon_mode == "sniper" then return 3 end
+  return 3
+end
+
 -- Dm/ctf options
 config.general_cvars.timelimit = function(vote_state)
   if vote_state.match_mode == "dm" and vote_state.gametype == "ffa" then return 10 end
