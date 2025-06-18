@@ -31,7 +31,7 @@ function vote_handlers.get_map_handler(parms)
       if result.map_name == "" then
         error({ msg = "Map not found.", type = "map_not_specified" })
       end
-      result.info = string.format("map %s", result.map_name)
+      result.info = string.format("%s %s", cmd, result.map_name)
       local launch_cmd = cmd == "devmap" and "devmap" or cmd == "spmap" and "spmap" or "map"
       result.map_launch = string.format('%s "%s"', launch_cmd, result.map_name)
 
