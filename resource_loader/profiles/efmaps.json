@@ -4851,6 +4851,10 @@
       "profile": "eliteforce",
       "sha256": "ec944737869c7d24ecd6b75094c94243d2b02c0526cdc146914c84560baf4619"
     },
+    "baseEF/ef_garden": {
+      "profile": "eliteforce",
+      "sha256": "14a919a470cce4bb018d2fd27c35f5bf92fd5ad9addba93a5cd06ffb93a222a2"
+    },
     "baseEF/ef_iceworld": {
       "mapcfg_ef_iceworld": {
         "aas": "580c61c8eb04618d26210c02c7ae5323ab7078bba4488987b12694cf7562d4b8"
