@@ -33,7 +33,9 @@ function vote_handlers.get_map_handler(parms)
       end
       result.info = string.format("%s %s", cmd, result.map_name)
       local launch_cmd = cmd == "devmap" and "devmap" or cmd == "spmap" and "spmap" or "map"
-      result.map_launch = string.format('%s "%s"', launch_cmd, result.map_name)
+      result.map_launch = function()
+        maploader.launch_map(result.map_name, launch_cmd)
+      end
 
       args:advance_position(2)
       return result

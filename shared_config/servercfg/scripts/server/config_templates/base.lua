@@ -276,7 +276,7 @@ function module.init_server(config)
       run_vote_config()
 
       -- start the map
-      voting_ccmd.run_map_command(vote_state.commands.map.map_launch)
+      voting_ccmd.run_map_start(vote_state.commands.map.map_launch)
     end
 
     --------------------------------------------------

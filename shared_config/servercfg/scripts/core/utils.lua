@@ -182,11 +182,14 @@ function utils.start_cmd_context(fn)
 end
 
 ---------------------------------------------------------------------------------------
--- Run a console command during command context execution. Must be called from within
--- a command context (a function started by utils.start_cmd_context).
-function utils.context_run_cmd(cmd)
-  assert(coroutine.status(ls.command_contexts[1]) == "running")
-  coroutine.yield(cmd)
+-- Run a console command during command context execution.
+function utils.context_run_cmd(cmd, allow_non_context)
+  if coroutine.status(ls.command_contexts[1]) == "running" then
+    coroutine.yield(cmd)
+  else
+    assert(allow_non_context)
+    com.cmd_exec(cmd)
+  end
 end
 
 ---------------------------------------------------------------------------------------

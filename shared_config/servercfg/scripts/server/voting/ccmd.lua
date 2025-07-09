@@ -78,10 +78,10 @@ end
 ---------------------------------------------------------------------------------------
 -- Used by vote execution to launch a map without recursively triggering the map
 -- command override above.
-function ccmd.run_map_command(cmd)
+function ccmd.run_map_start(fn)
   assert(not map_starting)
   map_starting = true
-  utils.context_run_cmd(cmd)
+  fn()
   map_starting = false
 end
 
