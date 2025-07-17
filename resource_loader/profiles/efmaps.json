@@ -4855,6 +4855,10 @@
       "profile": "eliteforce",
       "sha256": "14a919a470cce4bb018d2fd27c35f5bf92fd5ad9addba93a5cd06ffb93a222a2"
     },
+    "baseEF/ef_garros": {
+      "profile": "eliteforce",
+      "sha256": "a535839b1af00c81ad4f36298b1eb2db2cba42a23cc0c6f291e8daac89b0125b"
+    },
     "baseEF/ef_iceworld": {
       "mapcfg_ef_iceworld": {
         "aas": "580c61c8eb04618d26210c02c7ae5323ab7078bba4488987b12694cf7562d4b8"
