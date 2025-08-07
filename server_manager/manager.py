@@ -23,6 +23,7 @@ import string
 import time
 import signal
 import stat
+import platform
 
 # Arbitrary value
 MONITOR_PORT = 15267
@@ -58,12 +59,33 @@ def make_executable(file_path):
     pass
 
 def locate_binary(basedir, server_name):
-  if os.name == "nt":
-    bin_name = "cmod.ded.x64.exe"
+  machine = platform.machine().lower()
+  if "aarch" in machine or "arm" in machine:
+    if "64" in machine:
+      arch_ext = "arm64"
+    else:
+      arch_ext = "arm32"
   else:
-    bin_name = "cmod.ded.x64"
-  search_directories = [basedir, manager_directory, resource_serverdata_directory]
-  search_paths = [os.path.join(search_path, bin_name) for search_path in search_directories]
+    if "64" in machine:
+      arch_ext = "x64"
+    else:
+      arch_ext = "x86"
+
+  if os.name == "nt":
+    bin_name_arch = f"cmod.ded.{arch_ext}.exe"
+    bin_name_plain = f"cmod.ded.exe"
+  else:
+    bin_name_arch = f"cmod.ded.{arch_ext}"
+    bin_name_plain = f"cmod.ded"
+
+  search_paths = [
+    os.path.join(basedir, bin_name_plain),
+    os.path.join(basedir, bin_name_arch),
+    os.path.join(manager_directory, bin_name_plain),
+    os.path.join(manager_directory, bin_name_arch),
+    os.path.join(resource_serverdata_directory, bin_name_plain),
+    os.path.join(resource_serverdata_directory, bin_name_arch),
+  ]
   for index, search_path in enumerate(search_paths):
     log_server_message(server_name, f"Looking for binary at location {index + 1}: {search_path}")
   for index, search_path in enumerate(search_paths):
