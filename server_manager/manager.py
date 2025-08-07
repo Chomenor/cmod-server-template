@@ -212,7 +212,8 @@ class Server():
 
   def shutdown(self):
     try:
-      self.process.kill()
+      if self.process:
+        self.process.kill()
     except Exception as ex:
       print(f"exception on '{self.server_name}' shutdown: {type(ex).__name__} ({ex})")
     try:
