@@ -1,8 +1,15 @@
 """
-This script is intended to be run as a background task to manage EF servers.
-It searches for servers in the "servers" directory, reads the configuration
-from the "config.json" file in each directory, and automatically starts
-and stops servers as needed.
+Usage:
+
+This script with no arguments runs in "manager" mode. It searches for servers
+in the "servers" directory, reads the configuration from the "config.json" file in
+each directory, and automatically runs all enabled servers. The config.json files
+are automatically re-checked, so individual servers can be started, stopped, or
+restarted by modifying their config.json file while the manager is running.
+
+This script can also be called with a server name argument to run a single server
+in test mode with an interactive console. For example "python3 manager.py myserver"
+would start the server located in the "servers/myserver" directory.
 """
 
 import os
@@ -64,6 +71,34 @@ def locate_binary(basedir, server_name):
       log_server_message(server_name, f"Found binary at location {index + 1}.")
       return search_path
 
+def get_server_args(server_name, config):
+  basedir = os.path.join(servers_directory, server_name)
+  server_bin = locate_binary(basedir, server_name)
+  if not server_bin:
+    raise Exception("Failed to locate server binary.")
+
+  args = [
+    server_bin,
+    "+set", "fs_dirs", "*fs_basepath fs_shared fs_resources",
+    "+set", "fs_basepath", basedir,
+    "+set", "fs_shared", shared_config_directory,
+    "+set", "fs_resources", resource_serverdata_directory,
+    "+set", "lua_startup", "scripts/start.lua",
+    "+set", "dedicated", "2" if config.get("public") else "1",
+    "+set", "net_ip", config["ip"],
+    "+set", "net_port", str(config["port"]),
+  ]
+
+  if config.get("ip6_enabled"):
+    args.extend(["+set", "net_ip6", config["ip6"],
+                  "+set", "net_port6", str(config["port6"]),
+                  "+set", "net_enabled", "11"])
+  else:
+    args.extend(["+set", "net_enabled", "1"])
+
+  make_executable(server_bin)
+  return args, basedir
+
 class Server():
   def __init__(self, server_name, config, status_socket):
     self.process = None
@@ -91,32 +126,9 @@ class Server():
     self.status_pending = 0
     self.initial_status.clear()
 
-    basedir = os.path.join(servers_directory, self.server_name)
-    server_bin = locate_binary(basedir, self.server_name)
-    if not server_bin:
-      raise Exception("Failed to locate server binary.")
+    args, cwd = get_server_args(self.server_name, self.config)
 
-    args = [
-      server_bin,
-      "+set", "fs_dirs", "*fs_basepath fs_shared fs_resources",
-      "+set", "fs_basepath", basedir,
-      "+set", "fs_shared", shared_config_directory,
-      "+set", "fs_resources", resource_serverdata_directory,
-      "+set", "lua_startup", "scripts/start.lua",
-      "+set", "dedicated", "2" if self.config.get("public") else "1",
-      "+set", "net_ip", self.config["ip"],
-      "+set", "net_port", str(self.config["port"]),
-    ]
-
-    if self.config.get("ip6_enabled"):
-      args.extend(["+set", "net_ip6", self.config["ip6"],
-                   "+set", "net_port6", str(self.config["port6"]),
-                   "+set", "net_enabled", "11"])
-    else:
-      args.extend(["+set", "net_enabled", "1"])
-
-    make_executable(server_bin)
-    self.process = await asyncio.create_subprocess_exec(*args, cwd=basedir,
+    self.process = await asyncio.create_subprocess_exec(*args, cwd=cwd,
           stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     while True:
@@ -275,15 +287,39 @@ def register_signal(sig, msg):
   except Exception as ex:
     print(f"register_signal failed: {type(ex).__name__} ({ex})")
 
-try:
-  log_message(f"Manager starting.")
-  register_signal(signal.SIGTERM, "Received SIGTERM")
-  register_signal(signal.SIGINT, "Received SIGINT")
-  asyncio.run(main())
+def run_manager():
+  global servers
+  try:
+    log_message(f"Manager starting.")
+    register_signal(signal.SIGTERM, "Received SIGTERM")
+    register_signal(signal.SIGINT, "Received SIGINT")
+    asyncio.run(main())
 
-except BaseException as ex:
-  log_message(f"Manager terminating: {type(ex).__name__} ({ex})")
-  for server_name, server in servers.items():
-    server.shutdown()
-  servers = {}
-  sys.exit(0)
+  except BaseException as ex:
+    log_message(f"Manager terminating: {type(ex).__name__} ({ex})")
+    for server_name, server in servers.items():
+      server.shutdown()
+    servers = {}
+    sys.exit(0)
+
+def run_test_server(server_name):
+  config = Config()
+  if config.error:
+    print(f"global config error: {config.error}")
+  if server_config := config.servers.get(server_name):
+    if error := server_config.get("error"):
+      print(f"config error for '{server_name}': {error}")
+    else:
+      args, cwd = get_server_args(server_name, server_config)
+      print(f"starting test server '{server_name}'")
+      subprocess.run(args, cwd=cwd)
+  else:
+    print(f"server not found: '{server_name}'")
+
+if __name__ == "__main__":
+  if len(sys.argv) == 1:
+    # No arguments provided
+    run_manager()
+  else:
+    # Test server name specified
+    run_test_server(sys.argv[1])
