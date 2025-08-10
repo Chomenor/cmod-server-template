@@ -4992,6 +4992,10 @@
       "profile": "eliteforce",
       "sha256": "326bf7e76abd9ecb2a2e28a21a4f851597fcd5863eb7a5f6d640598260ccaee8"
     },
+    "baseEF/ef_village": {
+      "profile": "eliteforce",
+      "sha256": "a60fa4ae73b50c5f5fefe464b7363627df2a3605a401606ceaaf149fcefcc0f6"
+    },
     "baseEF/efarea51": {
       "profile": "eliteforce",
       "sha256": "5cc1bb4c63ce9462fb61456ccd32a2be95d457f660efab1cba3f1e8454e395f5"
