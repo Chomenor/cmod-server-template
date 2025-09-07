@@ -1,12 +1,16 @@
 {
   "server_resources": {
+    "cmod.ded.arm64": {
+      "notes": "2025/09/06 https://github.com/Chomenor/cmod-engine-alpha/commit/23c5934f8673714450d5621b311620f890ed2854",
+      "sha256": "e850eadf35d76e06b0b107aac624d7c8e4ebf8c9ab842f7cea3ae12eae88ef25"
+    },
     "cmod.ded.x64": {
-      "notes": "https://github.com/Chomenor/cmod-engine-alpha/commit/11896c903059bd45d554b15e36344175c4581e94",
-      "sha256": "057b8ab2002038871dc60f8640db219a46a8894ab7b59c485f0bab6a39a8d4fd"
+      "notes": "2025/09/06 https://github.com/Chomenor/cmod-engine-alpha/commit/23c5934f8673714450d5621b311620f890ed2854",
+      "sha256": "fcc20a45baf7347146654c2c83b09951b4ebcb79cdf8c6c387a943172aca1869"
     },
     "cmod.ded.x64.exe": {
-      "notes": "https://github.com/Chomenor/cmod-engine-alpha/commit/11896c903059bd45d554b15e36344175c4581e94",
-      "sha256": "bf3db0548d1ef2b96766784eded7a0b1daaf6812ca8b617be04f951aa6f664d4"
+      "notes": "2025/09/06 https://github.com/Chomenor/cmod-engine-alpha/commit/23c5934f8673714450d5621b311620f890ed2854",
+      "sha256": "8a1f6cbd2fa02eca47ec1f0435ab547e288fdff52e28deca6ac7275bab6a3301"
     }
   }
 }
