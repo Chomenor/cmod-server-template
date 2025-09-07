@@ -205,6 +205,9 @@ function logging.print(message, conditions, printlevel, parms)
   -- Convert printlevel to console conditions.
   if printlevel == 1 then
     pconditions.developer = { priority = 0 }
+    if com.cvar_get_integer("developer") ~= 0 then
+      pconditions.console = { priority = 0 }
+    end
   end
   if printlevel == 2 then
     pconditions.console = { priority = 0 }
