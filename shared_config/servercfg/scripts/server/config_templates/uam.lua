@@ -256,6 +256,9 @@ function module.init_server(config)
     return string.format("^3Vote commands are:\n^7%s", formatter:get_string())
   end
 
+  -- change maps every 20 minutes
+  config.map_skip_time = 20 * 60
+
   base_template.init_server(config)
 end
 

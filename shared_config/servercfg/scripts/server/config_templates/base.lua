@@ -22,6 +22,7 @@ function module.init_server(config)
   local maploader = require("scripts/server/maploader")
   local entity_processing = require("scripts/server/entities/main")
   local floodprotect = require("scripts/server/floodprotect")
+  local auto_map_skip = require("scripts/server/misc/auto_map_skip")
   local rotation = require("scripts/server/rotation")
   require("scripts/server/misc/chat_filter")
 
@@ -184,6 +185,21 @@ function module.init_server(config)
     -- Called for both map and non-map votes.
     local function run_vote_config()
       voting_utils.run_actions(vote_state.commands)
+
+      -- Set auto-skip to 2 hours default for rotation maps, and 3 minutes for
+      -- non-rotation maps or if any additional modifications are voted.
+      if config.map_skip_enabled == false then
+        auto_map_skip.set_map_switch_timer(nil)
+      elseif vote_state.commands.in_rotation then
+        auto_map_skip.set_map_switch_timer(config.map_skip_time or 2 * 60 * 60)
+      else
+        for key, _ in pairs(vote_state.commands) do
+          if key ~= "map_skip" and key ~= "map_restart" then
+            auto_map_skip.set_map_switch_timer(3 * 60)
+            break
+          end
+        end
+      end
     end
 
     --------------------------------------------------
@@ -332,6 +348,13 @@ function module.init_server(config)
 
   -- Configure rotation.
   rotation.set_rotation(config.rotation)
+
+  -- Configure auto map skip.
+  auto_map_skip.config = {
+    skip_function = function()
+      com.cmd_exec("map_skip")
+    end,
+  }
 
   -- Set modifiable cvar initial values.
   config_utils.set_cvar_table(config.modifiable_cvars)
