@@ -33,10 +33,8 @@ end
 
 ---------------------------------------------------------------------------------------
 -- Load map info if map was located. Returns nil on error or map not found.
+-- Call com.fs_auto_refresh() ahead of this function if necessary to find newly added maps.
 function maploader.load_map_info(map_name, verbose)
-  -- check if maps were just added
-  com.fs_auto_refresh()
-
   if maploader.config.mapsource_db then
     local result = nil
     local success, error_info = pcall(function()
