@@ -6,6 +6,7 @@ Misc utility functions for server and mod config.
 
 local utils = require("scripts/core/utils")
 local logging = require("scripts/core/logging")
+local cvar = require("scripts/server/misc/cvar")
 
 local config_utils = core.init_module()
 
@@ -14,37 +15,9 @@ config_utils.const = {
 }
 
 ---------------------------------------------------------------------------------------
--- Set cvar with support for several types:
--- function is called with arguments in parms.fn_args
--- nil is ignored (nothing is set)
--- number and boolean are converted to string
+-- Keeping this for now as a placeholder for cvar.set
 function config_utils.set_cvar(name, value, parms)
-  parms = parms or {}
-
-  if type(value) == "function" then
-    value = value(table.unpack(parms.fn_args or {}))
-  end
-
-  if value == nil then
-    return
-  elseif type(value) == "number" then
-    value = tostring(value)
-  elseif type(value) == "boolean" then
-    value = utils.if_else(value, "1", "0")
-  end
-
-  if type(value) == "string" then
-    -- use regular "set" command so cvars aren't considered "engine" cvars
-    -- and can be reset via normal cvar_restart
-    if parms.serverinfo then
-      com.cmd_exec(string.format('sets "%s" "%s"', name, value), "now")
-    else
-      com.cmd_exec(string.format('set "%s" "%s"', name, value), "now")
-    end
-  else
-    logging.print(string.format("WARNING: config_utils.set_cvar invalid type for %s", name),
-      "WARNINGS", logging.PRINT_CONSOLE)
-  end
+  cvar.set(name, value, parms)
 end
 
 ---------------------------------------------------------------------------------------

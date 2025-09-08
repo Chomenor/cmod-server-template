@@ -16,6 +16,7 @@ local svutils = require("scripts/server/svutils")
 local cshandling = require("scripts/server/configstrings")
 local logging = require("scripts/core/logging")
 local maploader = require("scripts/server/maploader")
+local cvar = require("scripts/server/misc/cvar")
 
 --[[===========================================================================================
 MISC
@@ -327,7 +328,7 @@ utils.register_event_handler(sv.events.pre_map_start, function(context, ev)
       table.insert(manifest_entries, "#currentmap_pak")
     end
   end
-  com.cvar_force_set("fs_download_manifest", table.concat(manifest_entries, " "))
+  cvar.set("fs_download_manifest", table.concat(manifest_entries, " "))
 
   -- this shouldn't actually be used, but set fs_pure_manifest to avoid engine clearing
   -- sv_pure due to it being empty or causing unnecessary warnings
@@ -335,7 +336,7 @@ utils.register_event_handler(sv.events.pre_map_start, function(context, ev)
   table.insert(manifest_entries, "baseEF/pak2:3960871590")
   table.insert(manifest_entries, "baseEF/pak1:596947475")
   table.insert(manifest_entries, "baseEF/pak0:3376297517")
-  com.cvar_force_set("fs_pure_manifest", table.concat(manifest_entries, " "))
+  cvar.set("fs_pure_manifest", table.concat(manifest_entries, " "))
 
   context:call_next(ev)
 end, "pakrefs_main")

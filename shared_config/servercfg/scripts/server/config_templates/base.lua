@@ -10,6 +10,7 @@ function module.init_server(config)
   local utils = require("scripts/core/utils")
   local svutils = require("scripts/server/svutils")
   local logging = require("scripts/core/logging")
+  local cvar = require("scripts/server/misc/cvar")
   local voting_utils = require("scripts/server/voting/utils")
   local voting_vote = require("scripts/server/voting/vote")
   local voting_ccmd = require("scripts/server/voting/ccmd")
@@ -192,7 +193,7 @@ function module.init_server(config)
       local saved_cvars = config_utils.store_current_cvars(config.modifiable_cvars)
       local saved_serverinfo_cvars = config_utils.store_current_cvars(
         config.modifiable_serverinfo_cvars)
-      utils.context_run_cmd("cvar_restart")
+      cvar.begin_restart_config()
 
       -- set default cvars
       config_utils.set_cvar_table({
