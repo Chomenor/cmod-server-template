@@ -170,7 +170,7 @@ local function finish_vote(passed)
   assert(vote.current_vote)
 
   if passed then
-    sv.send_servercmd(nil, 'print "Vote passed.\n"')
+    sv.send_servercmd(nil, string.format('print "Vote passed: ^3%s\n"', vote.current_vote.action.info_string))
     vote.current_vote.action.exec()
   else
     sv.send_servercmd(nil, 'print "Vote failed.\n"')
