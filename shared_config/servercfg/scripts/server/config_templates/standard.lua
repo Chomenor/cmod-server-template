@@ -153,6 +153,7 @@ function module.init_server(config)
     formatter:add_block(config.enable_gravity_vote and "gravity <gravity>", true)
     formatter:add_block(config.enable_knockback_vote and "knockback <knockback>", true)
     formatter:add_block(config.enable_bots_vote and "bots <count>", true)
+    formatter:add_block(config.enable_botskill_vote and "botskill <skill>", true)
     formatter:add_block(config.enable_map_skip_vote and "map_skip", true)
 
     return string.format("^3Vote commands are:\n^7%s", formatter:get_string())

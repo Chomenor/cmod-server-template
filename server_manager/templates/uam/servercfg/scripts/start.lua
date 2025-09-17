@@ -92,6 +92,7 @@ config.enable_ctf_vote = true
 config.enable_sniper_vote = true
 config.enable_tag_vote = true
 config.enable_bots_vote = true
+config.enable_botskill_vote = true
 config.enable_rounds_vote = true
 config.enable_speed_vote = true
 config.enable_gravity_vote = true

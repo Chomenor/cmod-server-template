@@ -95,6 +95,18 @@ function vote_handlers.get_numeric_handler(parms)
 end
 
 ---------------------------------------------------------------------------------------
+function vote_handlers.get_botskill_handler()
+  return vote_handlers.get_numeric_handler({
+    name = "botskill", cmd_aliases = utils.set("bot_skill"),
+    tags = utils.set("any", "botskill"),
+    cvar_name = "g_spSkill", min = 1, max = 5, interval = 1,
+    extra_action = function()
+      com.cmd_exec("bot_reskill_all", "now")
+    end,
+  })
+end
+
+---------------------------------------------------------------------------------------
 function vote_handlers.get_bots_handler(min, max)
   return function(args)
     local cmd = args:get(1).val

@@ -96,6 +96,7 @@ config.enable_elimination_vote = true
 config.enable_assimilation_vote = true
 config.enable_actionhero_vote = true
 config.enable_bots_vote = true
+config.enable_botskill_vote = true
 config.enable_speed_vote = true
 config.enable_gravity_vote = true
 config.enable_knockback_vote = true

@@ -80,6 +80,9 @@ function module.init_server(config)
     if config.enable_bots_vote or is_admin then
       vote_state.handlers.bots = handlers.get_bots_handler(0, 10)
     end
+    if config.enable_botskill_vote or is_admin then
+      vote_state.handlers.botskill = handlers.get_botskill_handler()
+    end
 
     if config.enable_speed_vote or is_admin then
       vote_state.handlers.speed = handlers.get_numeric_handler({
@@ -225,6 +228,7 @@ function module.init_server(config)
         timelimit = 10,
         g_holoIntro = 0,
         fraglimit = 0,
+        g_spSkill = 0,
         lua_entitySuppressMiscCvars = 1,
       })
 
@@ -271,6 +275,7 @@ function module.init_server(config)
       if com.cvar_get_integer("bot_minplayers") == 0 then
         svutils.kick_all_bots()
       end
+      com.cmd_exec("bot_reskill_all", "now")
 
       -- configure entity conversion
       if vote_state.map_info.entity_type_painkeep then
