@@ -30,17 +30,15 @@ local function print_no_callback(text)
 end
 
 ---------------------------------------------------------------------------------------
--- Converts print condition string to table format.
--- Example:
--- "warnings!1 info" => {warnings={priority=1}, info={priority=0}}
+-- Converts condition string to set.
+-- Example: "warnings info" => {warnings=true, info=true}
 ---@param conditions string?
 local function parse_conditions(conditions)
   local output = {}
 
   if conditions then
     for token in string.gmatch(string.lower(conditions), "%S+") do
-      local condition, flags = string.match(token, "([^!]*)(.*)")
-      output[condition] = { priority = (flags ~= "" and utils.to_integer(flags:sub(2))) or 0 }
+      output[token] = true
     end
   end
 
@@ -49,10 +47,9 @@ end
 
 ---------------------------------------------------------------------------------------
 -- Returns true if event conditions satisfy logger conditions for the message to be written.
-local function check_conditions(eventConditions, loggerConditions)
-  for condition, loggerDetail in pairs(loggerConditions) do
-    local eventDetail = eventConditions[condition]
-    if eventDetail and eventDetail.priority >= loggerDetail.priority then
+local function check_conditions(event_conditions, logger_conditions)
+  for condition, _ in pairs(logger_conditions) do
+    if event_conditions[condition] then
       return true
     end
   end
@@ -204,13 +201,13 @@ function logging.print(message, conditions, printlevel, parms)
 
   -- Convert printlevel to console conditions.
   if printlevel == 1 then
-    pconditions.developer = { priority = 0 }
+    pconditions.developer = true
     if com.cvar_get_integer("developer") ~= 0 then
-      pconditions.console = { priority = 0 }
+      pconditions.console = true
     end
   end
   if printlevel == 2 then
-    pconditions.console = { priority = 0 }
+    pconditions.console = true
   end
 
   -- Write to file logs.

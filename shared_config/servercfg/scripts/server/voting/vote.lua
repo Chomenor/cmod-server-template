@@ -341,10 +341,10 @@ utils.register_event_handler(svutils.events.client_cmd_prefix .. "callvote", fun
       vote.current_vote.caller_address_no_port = caller_address_no_port
       register_vote(ev.client, 'y')
 
-      logging.print("Vote action:", "VOTING!-1")
-      logging.print(utils.object_to_string(result), "VOTING!-1")
-      logging.print("Voting state:", "VOTING!-1")
-      logging.print(utils.object_to_string(vote.current_vote.voters), "VOTING!-1")
+      logging.print("Vote action:", "VOTING_DEBUG")
+      logging.print(utils.object_to_string(result), "VOTING_DEBUG")
+      logging.print("Voting state:", "VOTING_DEBUG")
+      logging.print(utils.object_to_string(vote.current_vote.voters), "VOTING_DEBUG")
 
       -- check for immediate result
       local pass, fail = check_intermediate_result()
