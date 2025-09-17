@@ -117,7 +117,7 @@ config.bot_count = function(vote_state) -- in team modes, each team gets half th
   if vote_state.match_mode == "dm" then return 4 end
   if vote_state.gametype == "ctf" then return 4 end
 end
-config.bot_skill = 0 -- 1=weakest, 5=strongest, 0=special (same as skill 1 but no handicap)
+config.general_cvars.g_spSkill = 0 -- 1=weakest, 5=strongest, 0=default (same as skill 1 but no handicap)
 config.bot_standard_chat = false
 config.bot_team_chat = false
 
