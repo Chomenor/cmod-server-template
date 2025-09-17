@@ -3924,6 +3924,25 @@
       "sha256": "4c6ec7ab0f61ca775f7f35e19feba8629e76e5fa4878a6d2de0692e0d415a5b2"
     },
     "baseEF/ctf_voy6": {
+      "mapcfg_ctf_voy6": {
+        "entity_edit": [
+          [
+            {
+              "classname": "team_CTF_redflag"
+            },
+            null
+          ],
+          [
+            null,
+            {
+              "angle": "360",
+              "classname": "team_CTF_redflag",
+              "origin": "1049 469 138"
+            }
+          ]
+        ],
+        "notes": "fix issues due to duplicate red flag"
+      },
       "profile": "eliteforce",
       "sha256": "fdb310f1766d2b7be0f3c1960594acc6ae72c4413626cea6a6da6831b3d5a56a"
     },
