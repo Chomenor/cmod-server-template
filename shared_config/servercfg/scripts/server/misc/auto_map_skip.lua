@@ -44,7 +44,7 @@ svutils.start_timer("map_autoskip", 1000, function()
   end
 
   if ls.time_remaining and ls.time_remaining <= 0 and ls.server_empty_time >= empty_wait_time() then
-    logging.print("Skipping map due to auto skip time.", "AUTO_MAP_SKIP", logging.PRINT_CONSOLE)
+    logging.printf("AUTO_MAP_SKIP", "Skipping map due to auto skip time.")
     ls.time_remaining = nil
     if module.config.skip_function then
       module.config.skip_function()

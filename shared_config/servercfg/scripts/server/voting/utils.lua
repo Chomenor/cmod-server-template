@@ -182,8 +182,7 @@ function voting_utils.run_action(action, key, command)
       voting_utils.run_action(element, key, command)
     end
   elseif action then
-    logging.print(string.format("WARNING: vote_utils.run_action - unrecognized action for %s",
-      key), "VOTING WARNINGS", logging.PRINT_CONSOLE)
+    logging.printf("VOTING WARNINGS", "WARNING: vote_utils.run_action - unrecognized action for %s", key)
   end
 end
 

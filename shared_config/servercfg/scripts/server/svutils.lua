@@ -102,12 +102,11 @@ MISC EVENTS
 utils.register_event_handler(sv.events.post_client_connect, function(context, ev)
   if not svutils.client_is_bot(ev.client) then
     svutils.clients[ev.client].username = svutils.get_client_name(ev.client)
-    logging.print(string.format(
-        "Client %i connected as \"%s\" from %s ~ There are now %i players connected.",
-        ev.client, svutils.clients[ev.client].username,
-        sv.netadr_to_string(sv.get_client_netadr(ev.client)),
-        svutils.count_players()),
-      "LUA_NOTIFY_PLAYER_CONNECT")
+    logging.log_msg("LUA_NOTIFY_PLAYER_CONNECT",
+      "Client %i connected as \"%s\" from %s ~ There are now %i players connected.",
+      ev.client, svutils.clients[ev.client].username,
+      sv.netadr_to_string(sv.get_client_netadr(ev.client)),
+      svutils.count_players())
   end
   context:call_next(ev)
 end, "svutils-misc_events", 1000)
@@ -116,11 +115,10 @@ end, "svutils-misc_events", 1000)
 -- Run actions after client disconnects.
 utils.register_event_handler(sv.events.post_client_disconnect, function(context, ev)
   if not svutils.client_is_bot(ev.client) then
-    logging.print(string.format(
-        "Client %i as \"%s\" disconnected ~ There are now %i players connected.",
-        ev.client, svutils.clients[ev.client].username,
-        svutils.count_players()),
-      "LUA_NOTIFY_PLAYER_CONNECT")
+    logging.log_msg("LUA_NOTIFY_PLAYER_CONNECT",
+      "Client %i as \"%s\" disconnected ~ There are now %i players connected.",
+      ev.client, svutils.clients[ev.client].username,
+      svutils.count_players())
   end
   context:call_next(ev)
 end, "svutils-misc_events", 1000)
@@ -131,10 +129,9 @@ utils.register_event_handler(sv.events.post_userinfo_changed, function(context, 
   if svutils.client_is_connected(ev.client) and not svutils.client_is_bot(ev.client) then
     local new_name = svutils.get_client_name(ev.client)
     if new_name ~= svutils.clients[ev.client].username then
-      logging.print(string.format(
-          "Client %i renamed from \"%s\" to \"%s\"",
-          ev.client, svutils.clients[ev.client].username, new_name),
-        "LUA_NOTIFY_PLAYER_RENAME")
+      logging.log_msg("LUA_NOTIFY_PLAYER_RENAME",
+        "Client %i renamed from \"%s\" to \"%s\"",
+        ev.client, svutils.clients[ev.client].username, new_name)
       svutils.clients[ev.client].username = new_name
     end
   end
@@ -144,8 +141,7 @@ end, "svutils-misc_events", 1000)
 ---------------------------------------------------------------------------------------
 -- Run actions after map changes.
 utils.register_event_handler(sv.events.post_map_start, function(context, ev)
-  logging.print(string.format("Map Change to \"%s\"", com.cvar_get_string("mapname")),
-    "LUA_NOTIFY_MAP_CHANGE")
+  logging.log_msg("LUA_NOTIFY_MAP_CHANGE", "Map Change to \"%s\"", com.cvar_get_string("mapname"))
   context:call_next(ev)
 end, "svutils-misc_events", 1000)
 
@@ -225,9 +221,8 @@ local function set_intermission_state(new_state)
   local old_state = svutils.intermission_state
   if old_state ~= new_state then
     svutils.intermission_state = new_state
-    logging.print(string.format("Lua intermission state changed from '%s' to '%s'",
-        intermission_state_names[old_state], intermission_state_names[new_state]),
-      "LUA_INTERMISSION_STATE")
+    logging.log_msg("LUA_INTERMISSION_STATE", "Lua intermission state changed from '%s' to '%s'",
+        intermission_state_names[old_state], intermission_state_names[new_state])
     utils.run_event({
       name = svutils.events.intermission_state_changed,
       old_state = old_state,

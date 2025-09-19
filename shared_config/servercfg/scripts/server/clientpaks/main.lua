@@ -72,7 +72,7 @@ function pakrefs.ReferenceSet()
     else
       local entry = self.table[hash]
       if entry.name ~= name then
-        utils.print(string.format("WARNING: Paks with inconsistent names (%s / %s)", entry.name, name))
+        utils.printf("WARNING: Paks with inconsistent names (%s / %s)", entry.name, name)
       end
       entry.pure_sort = entry.pure_sort or pure_sort
       entry.pure = entry.pure or not download_source
@@ -169,8 +169,7 @@ function pakrefs.ReferenceSet()
   function rs:log_references(conditions)
     for _, ref in ipairs(self:get_sorted_references(true, true)) do
       local type = ((ref.download_source and "D") or "") .. ((ref.pure and "P") or "")
-      local msg = string.format("  %s name(%s) hash(%i)\n", type, ref.name, ref.hash)
-      logging.print(msg, conditions)
+      logging.log_msg(conditions, "  %s name(%s) hash(%i)\n", type, ref.name, ref.hash)
     end
   end
 
@@ -281,7 +280,7 @@ utils.register_event_handler(cshandling.events.send_systeminfo, function(context
     local refs
     svutils.clients[ev.client].ref_state, refs = generate_reference_state(ev.client)
 
-    logging.print(string.format('Generating pak references for client %i\n', ev.client), "PAKREFS")
+    logging.log_msg("PAKREFS", "Generating pak references for client %i", ev.client)
     refs:log_references("PAKREFS")
   end
 
@@ -363,7 +362,7 @@ utils.register_event_handler(sv.events.pre_map_start_infocs, function(context, e
   -- the server side recording/admin spectator system needs some valid values set here
   local ref_state, refs = generate_reference_state(nil)
 
-  logging.print("Generating common pak refs", "PAKREFS")
+  logging.log_msg("PAKREFS", "Generating common pak refs")
   refs:log_references("PAKREFS")
 
   com.cvar_force_set("sv_paks", ref_state.pure_hashes)

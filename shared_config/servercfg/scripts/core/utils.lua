@@ -44,9 +44,9 @@ function utils.register_event_handler(event_name, handler_fn, handler_desc, hand
   -- check that this handler isn't already defined
   for i, v in ipairs(handlers) do
     if v.desc == handler_desc then
-      logging.print(string.format(
+      logging.printf("WARNINGS",
         "WARNING: utils.register_event_handler: description '%s' already registered for '%s'",
-        handler_desc, event_name), "WARNINGS", logging.PRINT_CONSOLE)
+        handler_desc, event_name)
       return
     end
   end
@@ -89,16 +89,15 @@ function utils.run_event(ev)
   end
 
   local function error_handler(err)
-    logging.print("WARNING: Error handling event " .. ev.name .. ": " .. tostring(err),
-      "WARNINGS", logging.PRINT_CONSOLE)
-    logging.print(debug.traceback() .. "\n", "WARNINGS", logging.PRINT_CONSOLE)
+    logging.printf("WARNINGS", "WARNING: Error handling event %s: %s", ev.name, tostring(err))
+    logging.printf("WARNINGS", "%s", debug.traceback())
   end
 
   local context = { call_next = call_next, handlers = handlers, call_pos = 0 }
   xpcall(context.call_next, error_handler, context, ev)
   if context.call_pos < #context.handlers and not context.ignore_uncalled then
-    logging.print("WARNING: Event " .. ev.name .. " has uncalled handlers, possible missing call_next",
-      "WARNINGS", logging.PRINT_CONSOLE)
+    logging.printf("WARNINGS", "WARNING: Event %s has uncalled handlers, possible missing call_next",
+      ev.name)
   end
 end
 
@@ -224,18 +223,20 @@ utils.register_event_handler(com.events.post_frame, function(context, ev)
 end, "utils-framecount", 1000)
 
 ---------------------------------------------------------------------------------------
+-- Print message to console. Automatically inserts newline at end.
 function utils.print(str)
-  if logging and logging.print then
-    if str:sub(-1) ~= "\n" then
-      str = str .. "\n"
-    end
-    logging.print(str)
+  if str:sub(-1) ~= "\n" then
+    str = str .. "\n"
+  end
+  if logging and logging.print_ext then
+    logging.print_ext(str)
   else
     print("[utils.print: logging uninitialized] " .. str)
   end
 end
 
 ---------------------------------------------------------------------------------------
+-- Print formatted message to console. Automatically inserts newline at end.
 function utils.printf(...)
   utils.print(string.format(...))
 end

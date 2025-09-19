@@ -27,7 +27,7 @@ local function get_info_handler()
 
   function handler:log_messages()
     for warning, count in pairs(self.messages) do
-      logging.print(string.format("entity conversion: %s [x%i]", warning, count), "ENTITYCONVERT")
+      logging.log_msg("ENTITYCONVERT", "entity conversion: %s [x%i]", warning, count)
     end
   end
 
@@ -38,8 +38,7 @@ end
 local function process_entities(entity_string, config)
   local entity_set = loader.parse_entities(entity_string)
   if entity_set.error then
-    logging.print("WARNING: Error processing entities - " .. entity_set.error,
-      "ENTITYCONVERT WARNINGS", logging.PRINT_CONSOLE)
+    logging.printf("ENTITYCONVERT WARNINGS", "WARNING: Error processing entities - %s", entity_set.error)
     return entity_string
   end
 
@@ -79,8 +78,7 @@ utils.register_event_handler(sv.events.load_entities, function(context, ev)
     g_gametype = com.cvar_get_integer("g_gametype"),
   }
   ev.text = process_entities(ev.text, config)
-  logging.print(string.format("Entity conversion completed in %s seconds\n", os.clock() - start),
-    "ENTITYCONVERT")
+  logging.log_msg("ENTITYCONVERT", "Entity conversion completed in %s seconds\n", os.clock() - start)
   ev.override = true
   context:call_next(ev)
 end, "entityprocess_main")

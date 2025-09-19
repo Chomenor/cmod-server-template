@@ -87,8 +87,8 @@ end
 
 ---------------------------------------------------------------------------------------
 local function log_chat_message(client, msg, target_str)
-  logging.print(string.format("Client %i%s ~ %s: %s",
-    client, target_str, svutils.get_client_name(client), msg), "LUA_CHAT")
+  logging.log_msg("LUA_CHAT", "Client %i%s ~ %s: %s",
+    client, target_str, svutils.get_client_name(client), msg)
 end
 
 ---------------------------------------------------------------------------------------

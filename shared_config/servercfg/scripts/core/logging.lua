@@ -8,6 +8,11 @@ local utils = require("scripts/core/utils")
 
 local logging = core.init_module()
 
+-- values must match engine
+logging.PRINT_NONE = 0
+logging.PRINT_DEVELOPER = 1
+logging.PRINT_CONSOLE = 2
+
 -- local state
 logging.internal = {}
 local ls = logging.internal
@@ -15,11 +20,6 @@ local ls = logging.internal
 ls.loggers = {}
 ls.stack_frames = {}
 ls.suppress_print_handler = false
-
--- values must match engine
-logging.PRINT_NONE = 0
-logging.PRINT_DEVELOPER = 1
-logging.PRINT_CONSOLE = 2
 
 ---------------------------------------------------------------------------------------
 -- Write console output to engine without triggering recursive calls.
@@ -181,20 +181,12 @@ end
 ---@param message string Message to log.
 ---@param conditions string? Formatted condition string.
 ---@param printlevel integer? 0 = no console print, 1 = developer mode print, 2 = normal print
-function logging.print(message, conditions, printlevel, parms)
+function logging.print_ext(message, conditions, printlevel, parms)
+  printlevel = printlevel or logging.PRINT_CONSOLE
   parms = parms or {}
   local pconditions = parse_conditions(conditions)
 
-  -- If conditions are set, default to info print (conditions only), otherwise console print
-  if not printlevel then
-    if conditions then
-      printlevel = logging.PRINT_NONE
-    else
-      printlevel = logging.PRINT_CONSOLE
-    end
-  end
-
-  -- Support adding newline to non-print messages.
+  -- Support automatic newline.
   if not parms.no_auto_newline and message:sub(-1) ~= "\n" then
     message = message .. "\n"
   end
@@ -232,6 +224,22 @@ function logging.print(message, conditions, printlevel, parms)
       print_no_callback(conmsg)
     end
   end
+end
+
+---------------------------------------------------------------------------------------
+---Prints message to console and also to loggers matching conditions.
+---@param conditions string Condition string.
+---@param ... string Formatted message to log.
+function logging.printf(conditions, ...)
+  logging.print_ext(string.format(...), conditions, logging.PRINT_CONSOLE)
+end
+
+---------------------------------------------------------------------------------------
+---Writes message to loggers matching conditions.
+---@param conditions string Condition string.
+---@param ... string Formatted message to log.
+function logging.log_msg(conditions, ...)
+  logging.print_ext(string.format(...), conditions, logging.PRINT_NONE)
 end
 
 ---------------------------------------------------------------------------------------
@@ -298,7 +306,7 @@ end, "logging")
 utils.register_event_handler(com.events.console_print, function(context, ev)
   if not ev.in_redirect and not ls.suppress_print_handler then
     -- Output the message to applicable loggers.
-    logging.print(ev.text, ev.conditions, ev.printlevel,
+    logging.print_ext(ev.text, ev.conditions, ev.printlevel,
       { no_auto_newline = ev.no_auto_newline })
     ev.suppress = true
   end

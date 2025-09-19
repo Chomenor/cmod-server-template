@@ -31,7 +31,7 @@ local ls = cvar.internal
 ---call will persist through the restart.
 function cvar.begin_restart_config()
   if (ls.restart_config) then
-    logging.print("WARNING: Cvar restart config already set.", "WARNINGS", logging.PRINT_CONSOLE)
+    logging.printf("WARNINGS", "WARNING: Cvar restart config already set.")
   end
 
   ls.restart_config = {
@@ -47,8 +47,7 @@ local function set_pending_cvar(pending_cvar, warn)
     com.cmd_exec(string.format('set "%s" "%s"', pending_cvar.name, pending_cvar.value), "now")
   end
   if warn and com.cvar_get_string(pending_cvar.name) ~= pending_cvar.value then
-    logging.print(string.format("WARNING: set_pending_cvar failed (%s)", pending_cvar.name), "WARNINGS",
-      logging.PRINT_CONSOLE)
+    logging.printf("WARNINGS", "WARNING: set_pending_cvar failed (%s)", pending_cvar.name)
   end
 end
 
@@ -74,8 +73,7 @@ function cvar.set(name, value, parms)
   end
 
   if type(value) ~= "string" then
-    logging.print(string.format("WARNING: cvar.set invalid type for %s", name),
-      "WARNINGS", logging.PRINT_CONSOLE)
+    logging.printf("WARNINGS", "WARNING: cvar.set invalid type for %s", name)
     return
   end
 

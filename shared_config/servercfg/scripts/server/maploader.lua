@@ -28,7 +28,7 @@ maploader.config = {
 
 ---------------------------------------------------------------------------------------
 local function print_msg(...)
-  logging.print("Map Loader: " .. string.format(...), "MAPLOADER", logging.PRINT_CONSOLE)
+  logging.printf("MAPLOADER", "Map Loader: %s", string.format(...))
 end
 
 ---------------------------------------------------------------------------------------
@@ -46,8 +46,8 @@ function maploader.load_map_info(map_name, verbose)
     end)
 
     if not success then
-      logging.print(string.format("WARNING: load_map_info encountered error '%s' loading info for map '%s'",
-        tostring(error_info), map_name), "MAPLOADER WARNINGS", logging.PRINT_CONSOLE)
+      logging.printf("MAPLOADER WARNINGS", "WARNING: load_map_info encountered error '%s' loading info for map '%s'",
+        tostring(error_info), map_name)
     elseif result then
       if verbose then
         utils.print("Map located in map database.\n")
@@ -112,7 +112,7 @@ function maploader.launch_map(map_name, cmd_name)
   maploader.map_info = map_info
 
   print_msg("Starting map '%s'", map_name)
-  logging.print(string.format("Map info: %s", utils.object_to_string(map_info)), "MAPLOADER_INFO")
+  logging.log_msg("MAPLOADER_INFO", "Map info: %s", utils.object_to_string(map_info))
   utils.context_run_cmd(string.format("%s \"%s\"", cmd_name, map_name), true)
   return true
 end
