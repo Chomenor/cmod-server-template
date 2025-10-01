@@ -5019,6 +5019,10 @@
       "profile": "eliteforce",
       "sha256": "b616afd0142286f96b6849fd16cb54e4d800759d0efe43b734609edda8f03938"
     },
+    "baseEF/ef_tides": {
+      "profile": "eliteforce",
+      "sha256": "cce50e9c7e64dfe52d99f2cdd2a44c3821dbe97e33bc6be45c1dd439e9384040"
+    },
     "baseEF/ef_toxic": {
       "profile": "eliteforce",
       "sha256": "d8313340b05e7b431b264c3352de71dbf11c20ee57a4f4c3c207f9f0c773fbcc"
