@@ -1,4 +1,10 @@
 {
+  "custom_pak_dirs": {
+    "maps": {
+      "mod_dir": "baseEF",
+      "profile": "eliteforce"
+    }
+  },
   "paks": {
     "baseEF/10to5": {
       "mapcfg_10to5": {

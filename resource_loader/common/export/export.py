@@ -20,12 +20,14 @@ class Manifest():
     self.profiles : dict[str, dict] = {}
     self.paks : dict[str, dict] = {}
     self.server_resources : dict[str, dict] = {}
+    self.custom_pak_dirs : dict[str, dict] = {}
 
   def import_manifest(self, data:dict):
     """ Load data from manifest. Last manifest loaded has precedence. """
     self.resource_urls.update(data.get("resource_urls", []))
     misc.update_delete_null(data.get("paks", {}), self.paks)
     misc.update_delete_null(data.get("server_resources", {}), self.server_resources)
+    misc.update_delete_null(data.get("custom_pak_dirs", {}), self.custom_pak_dirs)
     for profile_name, profile in data.get("profiles", {}).items():
       out = self.profiles.setdefault(profile_name, {})
       for key, value in profile.items():
@@ -86,16 +88,11 @@ class FileImporter():
   """ Handles reading pk3, bsp, and aas files identified by sha256 hash during the
   export process. """
   def __init__(self, cache_dir:misc.DirectoryHandler, resource_downloader:misc.ResourceDownloader|None):
-    self.local_directories : list[misc.DirectoryHandler] = []
     self.cache_dir = cache_dir
     self.export_resources : dict[ResourceHash, typing.Any] = {}
     self.resource_downloader = resource_downloader
 
   def get_path(self, res_hash:ResourceHash) -> str:
-    for directory in self.local_directories:
-      file_path = directory.get_read_path(res_hash)
-      if os.path.exists(file_path):
-        return file_path
     cache_path = self.cache_dir.get_write_path(res_hash)
     if os.path.exists(cache_path):
       return cache_path
@@ -173,6 +170,32 @@ class Pk3Sources():
     # pk3 name in "baseEF/pak0" format => Pk3 object
     self.pk3s : dict[str, Pk3Source] = {}
 
+  def load_from_custom_dirs(self, manifest:Manifest, base_dir:misc.DirectoryHandler, cache_dir:misc.DirectoryHandler, logger:misc.Logger):
+    for dir_name, manifest_entry in manifest.custom_pak_dirs.items():
+      dir_path = base_dir.get_subdir(dir_name)
+      for filename in os.listdir(dir_path.path):
+        split = filename.rsplit(".", 1)
+        if len(split) < 2 or split[1].lower() != "pk3":
+          continue
+        pak_name = manifest_entry["mod_dir"] + "/" + split[0].lower()
+
+        if pak_name in self.pk3s:
+          # already loaded
+          continue
+
+        print("Loading custom pk3 '%s'" % pak_name)
+
+        file_path = dir_path.get_read_path(filename)
+        hash = misc.file_sha256(file_path)
+
+        # copy pk3 to cache if needed
+        cache_path = cache_dir.get_write_path(os.path.join("resources", hash))
+        if not os.path.exists(cache_path):
+          shutil.copy(file_path, cache_path)
+
+        manifest_info = {**manifest_entry, "sha256": hash}
+        self.pk3s[pak_name] = Pk3Source(pak_name, cache_path, hash, manifest_info, cache_dir)
+  
   def load_from_manifest(self, manifest:Manifest, file_importer:FileImporter, cache_dir:misc.DirectoryHandler, logger:misc.Logger):
     for pak_name, manifest_info in manifest.paks.items():
       if pak_name in self.pk3s:
@@ -204,7 +227,7 @@ def write_resource_pk3(read, cache_dir:misc.DirectoryHandler, resource_hash:str,
       tgt.writestr(internal_name, data, compress_type=zipfile.ZIP_DEFLATED, compresslevel=4)
   return full_path, internal_name
 
-def run_export(manifest:Manifest, output_path:str, local_dirs:list[str] = [], keep_old_mirror:bool=False):
+def run_export(manifest:Manifest, output_path:str, custom_paks_path:str|None=None, keep_old_mirror:bool=False):
   base_dir = misc.DirectoryHandler(output_path)
   cache_dir = base_dir.get_subdir("cache")
   data_out_dir = base_dir.get_subdir("data_new")
@@ -224,8 +247,6 @@ def run_export(manifest:Manifest, output_path:str, local_dirs:list[str] = [], ke
   # Set up file importers
   downloader = misc.ResourceDownloader(manifest.resource_urls, download_logger)
   file_importer = FileImporter(cache_dir.get_subdir("resources"), downloader)
-  for local_dir in local_dirs:
-    file_importer.local_directories.append(misc.DirectoryHandler(local_dir))
   file_from_pk3_loader = FileFromPk3Loader()
 
   # Set up file exporter
@@ -233,6 +254,8 @@ def run_export(manifest:Manifest, output_path:str, local_dirs:list[str] = [], ke
 
   # Get available pk3s
   pk3_sources = Pk3Sources()
+  if custom_paks_path:
+    pk3_sources.load_from_custom_dirs(manifest, misc.DirectoryHandler(custom_paks_path), cache_dir, index_logger)
   pk3_sources.load_from_manifest(manifest, file_importer, cache_dir, index_logger)
   index_logger.log_info("Indexed %i pk3s" % len(pk3_sources.pk3s), True)
 

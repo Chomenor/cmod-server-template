@@ -66,7 +66,8 @@ def pk3_files_in_directory(path):
   yield from output
 
 class DirectoryHandler():
-  def __init__(self, path):
+  def __init__(self, path:str):
+    assert isinstance(path, str)
     self.path = path
     self.createdDirs = set()
 

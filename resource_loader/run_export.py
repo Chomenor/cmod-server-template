@@ -11,6 +11,8 @@ script_directory = os.path.dirname(os.path.abspath(__file__))
 # Should match resource_output_directory in server_manager/manager.py
 output_directory = os.path.join(script_directory, "output")
 
+custom_paks_directory = os.path.join(script_directory, "custom_paks")
+
 def process():
   # Load manifest
   manifest = export.Manifest()
@@ -19,9 +21,6 @@ def process():
   manifest.import_manifest(misc.read_json_file(f"{script_directory}/profiles/mod_resources.json"))
   manifest.import_manifest(misc.read_json_file(f"{script_directory}/profiles/engine_binaries.json"))
 
-  # Additional directories to look for resources with hash as filename
-  local_dirs = []
-
-  export.run_export(manifest, output_directory, local_dirs)
+  export.run_export(manifest, output_directory, custom_paks_directory)
 
 process()
