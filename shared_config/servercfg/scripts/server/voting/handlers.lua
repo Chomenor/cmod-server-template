@@ -232,7 +232,7 @@ function vote_handlers.get_gladiator_powerup_handler()
 
   local function action()
     for _, entry in ipairs({
-      { cvar = "g_mod_PowerupsAvailableFlags", sequence = { "q", "g", "b", "i", "r", "j" } },
+      { cvar = "g_mod_PowerupsAvailableFlags", sequence = { "q", "g", "b", "i", "r", "j", "s" } },
       { cvar = "g_mod_HoldableAvailableFlags", sequence = { "t", "m", "d", "f", "x" } },
     }) do
       local state = config_utils.import_gladiator_flags(com.cvar_get_string(entry.cvar), entry.sequence)
