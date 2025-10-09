@@ -60,8 +60,10 @@ end
 function config_utils.import_gladiator_flags(flags_str, keys)
   local output = {}
   for idx, key in ipairs(keys) do
-    local char = flags_str:sub(idx, 1)
-    output[key] = utils.to_boolean(char == 'y' or char == 'Y' or char == '1')
+    local char = flags_str:sub(idx, idx)
+    if char == 'y' or char == 'Y' or char == '1' then
+      output[key] = true
+    end
   end
   return output
 end
