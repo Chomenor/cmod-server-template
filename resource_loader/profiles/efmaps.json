@@ -4899,6 +4899,10 @@
       "profile": "eliteforce",
       "sha256": "62e3cc53acfc91377564aa1245cb618941d251957f89563647d4519b09262b66"
     },
+    "baseEF/ef_inferno": {
+      "profile": "eliteforce",
+      "sha256": "9ae4a1d93e51e4c8002699953d0c8fcf409885375afd0982f61b8cfe9c0c9550"
+    },
     "baseEF/ef_italy": {
       "profile": "eliteforce",
       "sha256": "3ca16e2dc0ce4868fa3754093009059a47dcb2663551a5f9e6d4273d58cb1b2e"
