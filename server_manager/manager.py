@@ -105,7 +105,7 @@ def get_server_args(server_name, config):
     "+set", "fs_basepath", basedir,
     "+set", "fs_shared", shared_config_directory,
     "+set", "fs_resources", resource_serverdata_directory,
-    "+set", "com_hunkmegs", "128",
+    "+set", "com_hunkmegs", "256",
     "+set", "lua_startup", "scripts/start.lua",
     "+set", "dedicated", "2" if config.get("public") else "1",
     "+set", "net_ip", config["ip"],
