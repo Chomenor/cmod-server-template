@@ -6657,6 +6657,10 @@
       "profile": "eliteforce",
       "sha256": "75a724dd6d7b28ce13783bc29d8cdcc8c519dc6aef01d6c6cebc59c7d12a6101"
     },
+    "baseEF/oasis": {
+      "profile": "eliteforce",
+      "sha256": "e666cf6b33f4bfe7bff5127499cd38e3b0ffe756647ea0dab7bbe1254c3bccff"
+    },
     "baseEF/oddcast": {
       "profile": "eliteforce",
       "sha256": "7cbe92aa7a1bcbe385c9e3fb72e46f9801031642e6b8f571ad7d45899df04a34"
