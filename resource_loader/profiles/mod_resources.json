@@ -12,9 +12,9 @@
     }
   },
   "server_resources": {
-    "servercfg_cmod/pakcmod-beta-2025-10-25.pk3": {
-      "notes": "2025/10/25 https://github.com/Chomenor/cmod-game-code/commit/492f895521e166120c806e7943008828f3603feb",
-      "sha256": "eb308bc7f6083f987c00949b53fbc34edc613b7425fab452a8b6099c3fd34255"
+    "servercfg_cmod/pakcmod-beta-2025-11-11.pk3": {
+      "notes": "2025/11/11 https://github.com/Chomenor/cmod-game-code/commit/78361e168240026b84ef9f4d2a044ff8a0a5692b",
+      "sha256": "52283672c94181c6b67ede665deee183447d19bb37f3c492f3cba54de9043a8a"
     }
   }
 }
