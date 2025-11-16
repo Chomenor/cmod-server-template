@@ -5013,6 +5013,10 @@
       "profile": "eliteforce",
       "sha256": "09adc760c041a2dee55e797c9d4393dd2eeea7411d260010bc556dc3aef4339b"
     },
+    "baseEF/ef_resistance": {
+      "profile": "eliteforce",
+      "sha256": "e2a44254c96fbdcc66ea59ea34de7627369f2f0597b20f0501b39b852c9d2517"
+    },
     "baseEF/ef_riftsanc": {
       "profile": "eliteforce",
       "sha256": "71ed710e58e423a8c321dd6db57d3b3a93ff11f0d5582ea1b1704d73ec69b610"
