@@ -4873,6 +4873,14 @@
       "profile": "eliteforce",
       "sha256": "3542824db4feaf55f384d02ab6d55295accc36069790fa688465753975363656"
     },
+    "baseEF/ef_dm_bridwag": {
+      "profile": "eliteforce",
+      "sha256": "0e7d43e699177f147e6c677d9613dc2b652d8df25a3402bb778075b4433c9430"
+    },
+    "baseEF/ef_dm_kirk": {
+      "profile": "eliteforce",
+      "sha256": "1257f4b58276b12c89750ef2d2b596d9aaf6a10fb5a40195e27fcc07d0e6f42a"
+    },
     "baseEF/ef_dust": {
       "mapcfg_ef_dust": {
         "aas": "f856dee6479a58bb46056e419124f9424b220e3b79f82c920f3a68404f1a8af0"
@@ -7893,6 +7901,10 @@
       },
       "profile": "eliteforce",
       "sha256": "512aed121d40a1bf93671a30bd13b44447049e6402c4b8a4cc4abd8018fdb30f"
+    },
+    "baseEF/skunkwest2": {
+      "profile": "eliteforce",
+      "sha256": "129efd7b0213a2b345bf2de841d2e1002634748196ded4476d2d9453b96bd421"
     },
     "baseEF/skunkysbitch": {
       "mapcfg_skunkysbitch": {
