@@ -4945,6 +4945,10 @@
       "profile": "eliteforce",
       "sha256": "dd7d5831a73d79944296179257d6897e7393cefddd24a91fa5573e1045be50f2"
     },
+    "baseEF/ef_kam2": {
+      "profile": "eliteforce",
+      "sha256": "7b02f0f2f4f25328342340e4921b157bfde07db124912d8a155fbd107775f03d"
+    },
     "baseEF/ef_karnak": {
       "profile": "eliteforce",
       "sha256": "5ff2a46a34bee92c94f9219a5232ba0bb89df84daf81a896b102dc6eda0772b4"
