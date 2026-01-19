@@ -4997,6 +4997,10 @@
       "profile": "eliteforce",
       "sha256": "1921eab1397b45a4bbf36e0dca74f54fe0976f72706828a6cefb55d6ed7853a2"
     },
+    "baseEF/ef_pra2": {
+      "profile": "eliteforce",
+      "sha256": "b3b7e98f6e2a36a53e81208952d97374cc899e8fedbf80aeb4089e2994df32d7"
+    },
     "baseEF/ef_pyramid": {
       "profile": "eliteforce",
       "sha256": "caae13669868d93dd2666449b720a8ae420839f31223bec2046aad7b528fc627"
