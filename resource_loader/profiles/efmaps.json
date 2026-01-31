@@ -4904,6 +4904,10 @@
       "profile": "eliteforce",
       "sha256": "01d9bab195da7e5699a2c33ade06cf6064aa369b3f8b463e7659ca8ef5dc08ae"
     },
+    "baseEF/ef_firebasewhite": {
+      "profile": "eliteforce",
+      "sha256": "8d921ae854c36df01756be12f122948318fa05a275cdbaebc691d2471a78ae2b"
+    },
     "baseEF/ef_garden": {
       "profile": "eliteforce",
       "sha256": "14a919a470cce4bb018d2fd27c35f5bf92fd5ad9addba93a5cd06ffb93a222a2"
