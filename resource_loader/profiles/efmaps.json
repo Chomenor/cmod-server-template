@@ -5005,6 +5005,10 @@
       "profile": "eliteforce",
       "sha256": "1921eab1397b45a4bbf36e0dca74f54fe0976f72706828a6cefb55d6ed7853a2"
     },
+    "baseEF/ef_pra1": {
+      "profile": "eliteforce",
+      "sha256": "4cb2de0954f1f288bfaf78135c18ea34c861c21976cde47294c013137c7d7d3d"
+    },
     "baseEF/ef_pra2": {
       "profile": "eliteforce",
       "sha256": "b3b7e98f6e2a36a53e81208952d97374cc899e8fedbf80aeb4089e2994df32d7"
