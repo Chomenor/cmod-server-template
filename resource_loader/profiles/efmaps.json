@@ -4885,6 +4885,10 @@
       "profile": "eliteforce",
       "sha256": "1257f4b58276b12c89750ef2d2b596d9aaf6a10fb5a40195e27fcc07d0e6f42a"
     },
+    "baseEF/ef_dm_mfspace": {
+      "profile": "eliteforce",
+      "sha256": "c256ba6e7e9301237f357cf35f19a8f1784ac0892b82bd810efd640d3d6c5e00"
+    },
     "baseEF/ef_dust": {
       "mapcfg_ef_dust": {
         "aas": "f856dee6479a58bb46056e419124f9424b220e3b79f82c920f3a68404f1a8af0"
