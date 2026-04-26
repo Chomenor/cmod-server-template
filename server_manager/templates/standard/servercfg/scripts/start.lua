@@ -160,6 +160,9 @@ config.general_cvars.g_mod_elimTweaks = true -- misc tweaks (recommended)
 config.general_cvars.g_mod_noOfGamesPerMatch = 1 -- number of rounds
 config.general_cvars.g_mod_finalistsTimelimit = 4
 
+-- Player handicap setting reduces speed, instead of health/damage (original: false)
+config.general_cvars.g_speedHandicap = false
+
 -- If default_gametype is "ctf", how to handle vote for ctf-incompatible map?
 -- Can be "ffa", "thm", or "block"
 config.ctf_fallback = "ffa"

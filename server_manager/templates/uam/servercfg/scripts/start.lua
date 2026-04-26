@@ -161,6 +161,9 @@ config.general_cvars.g_delayRespawn = function(vote_state)
   if vote_state.gametype == "ctf" then return 10 end
 end
 
+-- Player handicap setting reduces speed, instead of health/damage (original: false)
+config.general_cvars.g_speedHandicap = false
+
 -- If default_gametype is "ctf", how to handle vote for ctf-incompatible map?
 -- Can be "ffa", "thm", or "block"
 config.ctf_fallback = "ffa"
