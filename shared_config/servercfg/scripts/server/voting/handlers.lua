@@ -60,23 +60,18 @@ function vote_handlers.get_keyword_handler(parms)
 end
 
 ---------------------------------------------------------------------------------------
-function vote_handlers.get_numeric_handler(parms)
+local function get_cvar_handler(parms, get_value)
   return function(args)
     local cmd = args:get(1).val
+    local arg = args:get(2).val
     if cmd == parms.name or (parms.cmd_aliases and parms.cmd_aliases[cmd]) then
       local result = {
         tags = parms.tags,
         nocombo_tags = parms.nocombo_tags,
-        value = vote_utils.read_number(args:get(2).val, parms.min, parms.max, parms.interval),
       }
 
       function result.finalize(commands, finalize_state)
-        if not result.value or result.value < parms.min or result.value > parms.max then
-          error({
-            msg = string.format("%s must be a value between %s and %s.",
-              result.user_parameter, parms.min, parms.max)
-          })
-        end
+        get_value(arg, result)
 
         -- check for redundant vote
         if not next(vote_utils.commands_with_tag(commands, "map")) and
@@ -97,6 +92,33 @@ function vote_handlers.get_numeric_handler(parms)
       return result
     end
   end
+end
+
+---------------------------------------------------------------------------------------
+function vote_handlers.get_numeric_handler(parms)
+  return get_cvar_handler(parms, function(arg, result)
+    result.value = vote_utils.read_number(arg, parms.min, parms.max, parms.interval)
+    if not result.value or result.value < parms.min or result.value > parms.max then
+      error({
+        msg = string.format("%s must be a value between %s and %s.",
+          result.user_parameter, parms.min, parms.max)
+      })
+    end
+  end)
+end
+
+---------------------------------------------------------------------------------------
+function vote_handlers.get_boolean_handler(parms)
+  return get_cvar_handler(parms, function(arg, result)
+      local arg = arg:lower()
+      if arg == "1" or arg == "yes" or arg == "y" or arg == "on" or arg == "true" then
+        result.value = 1
+      elseif arg == "0" or arg == "no" or arg == "n" or arg == "off" or arg == "false" then
+        result.value = 0
+      else
+        error({ msg = string.format("%s must be 0 or 1.", result.user_parameter) })
+      end
+  end)
 end
 
 ---------------------------------------------------------------------------------------

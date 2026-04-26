@@ -83,6 +83,12 @@ function module.init_server(config)
     if config.enable_botskill_vote or is_admin then
       vote_state.handlers.botskill = handlers.get_botskill_handler()
     end
+    if config.enable_botsvshumans_vote or is_admin then
+      vote_state.handlers.botsvshumans = handlers.get_boolean_handler({
+        name = "bvh", cmd_aliases = utils.set("botsvshumans"),
+        tags = utils.set("any", "botsvshumans"), cvar_name = "g_botsVsHumans",
+      })
+    end
 
     if config.enable_speed_vote or is_admin then
       vote_state.handlers.speed = handlers.get_numeric_handler({
