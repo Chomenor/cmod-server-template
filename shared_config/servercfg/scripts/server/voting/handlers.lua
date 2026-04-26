@@ -84,7 +84,12 @@ function vote_handlers.get_numeric_handler(parms)
           error({ msg = string.format("%s already set.", result.user_parameter) })
         end
 
-        result.action = {string.format('set "%s" "%s"', parms.cvar_name, result.value), parms.extra_action}
+        result.action = function()
+          config_utils.set_cvar(parms.cvar_name, result.value)
+          if parms.extra_action then
+            parms.extra_action()
+          end
+        end
         result.info = string.format("%s %s", parms.name, result.value)
       end
 
@@ -143,9 +148,11 @@ function vote_handlers.get_bots_handler(min, max)
           error({ msg = "Bots already set." })
         end
 
-        result.action = {string.format("set bot_minplayers %i", result.value)}
-        if result.value == 0 then
-          table.insert(result.action, svutils.kick_all_bots)
+        result.action = function()
+          config_utils.set_cvar("bot_minplayers", result.value)
+          if result.value == 0 then
+            svutils.kick_all_bots()
+          end
         end
 
         result.info = string.format("bots %i", result.value)
