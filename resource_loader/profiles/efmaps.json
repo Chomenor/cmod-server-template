@@ -1758,6 +1758,10 @@
       "profile": "eliteforce",
       "sha256": "1b7900753973a8fc3d1846c7543d54f6d7a698045411b1ae2f25aa04695a24f9"
     },
+    "baseEF/ctf_cbr1_neo": {
+      "profile": "eliteforce",
+      "sha256": "ff3361c8cb241bbb17c62dfcb302a1e4dae8e3b39714f5aec74fc06971361317"
+    },
     "baseEF/ctf_cbr2": {
       "profile": "eliteforce",
       "sha256": "10ecc7ff255c2617536a1ab33c1426ac613a08950db5a96e4957341dc8d600f0"
